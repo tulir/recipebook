@@ -17,7 +17,7 @@ c.execute("""CREATE TABLE IF NOT EXISTS Ingredient (
 c.execute("""CREATE TABLE IF NOT EXISTS RecipePart (
     ingredient  INTEGER NOT NULL,
     recipe      INTEGER NOT NULL,
-    order       INTEGER NOT NULL,
+    `order`     INTEGER NOT NULL,
     amount      INTEGER NOT NULL,
     unit        VARCHAR(5),
     instruction TEXT,
