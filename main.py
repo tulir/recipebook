@@ -1,3 +1,4 @@
+from flask import Flask
 import sqlite3
 
 conn = sqlite3.connect('recipe.db')
@@ -25,3 +26,5 @@ c.execute("""CREATE TABLE IF NOT EXISTS RecipePart (
     FOREIGN KEY (ingredient) REFERENCES Ingredient(id),
     FOREIGN KEY (recipe)     REFERENCES Recipe(id)
 )""")
+
+app = Flask("tikape")
