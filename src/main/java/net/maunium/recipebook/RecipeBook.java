@@ -1,6 +1,6 @@
 package net.maunium.recipebook;
 
-import net.maunium.recipebook.api.IngredientAPI;
+import net.maunium.recipebook.api.Ingredients;
 import net.maunium.recipebook.model.*;
 import net.maunium.recipebook.util.JSON;
 import static spark.Spark.*;
@@ -39,11 +39,17 @@ public class RecipeBook {
 
 		path("/api", () -> {
 			path("/ingredient", () -> {
-				get("/list", IngredientAPI::list, JSON.transformer());
-				post("/add", IngredientAPI::add, JSON.transformer());
-				put("/:id", IngredientAPI::rename, JSON.transformer());
-				delete("/:id", IngredientAPI::delete, JSON.transformer());
+				get("/list", Ingredients::list, JSON.transformer());
+				post("/add", Ingredients::add, JSON.transformer());
+				put("/:id", Ingredients::rename, JSON.transformer());
+				delete("/:id", Ingredients::delete, JSON.transformer());
 			});
+			path("/recipe", () -> {
+				// TODO Recipe API paths
+			});
+			path("/cookbook", () -> {
+				// TODO Cookbook API paths
+			})
 		});
 
 		System.out.println("Running at http://localhost:8080");

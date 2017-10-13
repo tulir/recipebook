@@ -6,7 +6,7 @@ import net.maunium.recipebook.util.JSON;
 import spark.Request;
 import spark.Response;
 
-public class IngredientAPI {
+public class Ingredients {
 	public static Object list(Request request, Response response) {
 		return Ingredient.getAll();
 	}
