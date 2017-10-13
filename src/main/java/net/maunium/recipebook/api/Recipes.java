@@ -1,22 +1,33 @@
 package net.maunium.recipebook.api;
 
+import net.maunium.recipebook.model.Recipe;
 import spark.Request;
 import spark.Response;
 
 public class Recipes {
 	public static Object list(Request request, Response response) {
-		// TODO list recipes
-		// returns List<Recipe>
+		return Recipe.getAll();
 	}
 
 	public static Object add(Request request, Response response) {
-		// TODO add recipe
-		// returns created Recipe
+    	Recipe recipe = JSON.parseJSON(request.body(), Recipe.class);
+    	recipe.insert();
+    	return recipe;
 	}
 
 	public static Object get(Request request, Response response) {
-		// TODO get recipe by id.
-		// returns found Recipe
+		int id;
+		try {
+			id = Integer.parseInt(request.params("id"));
+		} catch (NumberFormatException e) {
+			response.status(400);
+			return new ErrorMessage("Invalid recipe ID");
+		}
+
+		Recipe recipe = JSON.parseJSON(request.body(), Recipe.class);
+		recipe.id = id;
+		recipe.update();
+		return recipe;
 	}
 
 	public static Object edit(Request request, Response response) {
@@ -25,7 +36,17 @@ public class Recipes {
 	}
 
 	public static Object delete(Request request, Response response) {
-		// TODO delete recipe.
+		int id;
+		try {
+			id = Integer.parseInt(request.params("id"));
+		} catch (NumberFormatException e) {
+			response.status(400);
+			return new ErrorMessage("Invalid recipe ID");
+		}
+
+		Recipe recipe = Recipe.get(id);
+		recipe.delete();
+		response.status(204);
 		return null;
 	}
 }
