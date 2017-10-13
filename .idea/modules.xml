@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/tikape.iml" filepath="$PROJECT_DIR$/tikape.iml" />
+      <module fileurl="file://$PROJECT_DIR$/recipebook.iml" filepath="$PROJECT_DIR$/recipebook.iml" />
     </modules>
   </component>
 </project>
