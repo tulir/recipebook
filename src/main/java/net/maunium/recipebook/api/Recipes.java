@@ -5,12 +5,12 @@ import spark.Response;
 
 public class Recipes {
 	public static Object list(Request request, Response response) {
-		// TODO list recipes
+		// TODO list recipes.
 		// returns List<Recipe>
 	}
 
 	public static Object add(Request request, Response response) {
-		// TODO add recipe
+		// TODO add recipe.
 		// returns created Recipe
 	}
 

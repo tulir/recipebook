@@ -1,5 +1,6 @@
 package net.maunium.recipebook;
 
+import net.maunium.recipebook.api.Cookbooks;
 import net.maunium.recipebook.api.Ingredients;
 import net.maunium.recipebook.api.Recipes;
 import net.maunium.recipebook.model.*;
@@ -51,11 +52,14 @@ public class RecipeBook {
 				get("/:id", Recipes::get, JSON.transformer());
 				put("/:id", Recipes::edit, JSON.transformer());
 				delete("/:id", Recipes::delete);
-				// TODO Recipe API paths
 			});
 			path("/cookbook", () -> {
-				// TODO Cookbook API paths
-			})
+				get("/list", Cookbooks::list, JSON.transformer());
+				post("/add", Cookbooks::add, JSON.transformer());
+				get("/:id", Cookbooks::get, JSON.transformer());
+				put("/:id", Cookbooks::edit, JSON.transformer());
+				delete("/:id", Cookbooks::delete);
+			});
 		});
 
 		System.out.println("Running at http://localhost:8080");
