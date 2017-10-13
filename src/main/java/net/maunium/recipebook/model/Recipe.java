@@ -57,6 +57,16 @@ public class Recipe implements ISQLTableClass {
 		}
 	}
 
+	public void delete() {
+		try {
+			PreparedStatement stmt = db.prepareStatement("DELETE FROM Recipe WHERE id = ?");
+			stmt.setInt(1, id);
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static Recipe get(int id) {
 		return get(id, true);
 	}

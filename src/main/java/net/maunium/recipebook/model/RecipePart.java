@@ -39,8 +39,8 @@ public class RecipePart {
 	public static int[] insertAll(Recipe recipe, List<RecipePart> parts) {
 		try {
 			PreparedStatement stmt = db.prepareStatement("INSERT INTO RecipePart (ingredient, recipe, order, amount, unit, instruction) VALUES (?, ?, ?, ?, ?, ?)");
-			for (int i = 0; i < parts.size(); i++) {
-				RecipePart part = parts.get(i);
+			for (int i = 1; i <= parts.size(); i++) {
+				RecipePart part = parts.get(i-1);
 				part.order = i;
 				stmt.setInt(1, part.ingredient.id);
 				stmt.setInt(2, recipe.id);
@@ -60,7 +60,7 @@ public class RecipePart {
 	public static List<RecipePart> getAll(Recipe recipe) {
 		List<RecipePart> parts = new ArrayList<>();
 		try {
-			PreparedStatement stmt = db.prepareStatement("SELECT * FROM RecipePart, Ingredient WHERE RecipePart.recipe=? AND RecipePart.ingredient = Ingredient.id");
+			PreparedStatement stmt = db.prepareStatement("SELECT * FROM RecipePart, Ingredient WHERE RecipePart.recipe=? AND RecipePart.ingredient = Ingredient.id ORDER BY RecipePart.order ASC");
 			stmt.setInt(1, recipe.id);
 
 			ResultSet results = stmt.executeQuery();

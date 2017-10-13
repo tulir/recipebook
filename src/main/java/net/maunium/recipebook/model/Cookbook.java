@@ -48,6 +48,16 @@ public class Cookbook implements ISQLTableClass {
 		}
 	}
 
+	public void delete() {
+		try {
+			PreparedStatement stmt = db.prepareStatement("DELETE FROM Cookbook WHERE id = ?");
+			stmt.setInt(1, id);
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static Cookbook get(int id) {
 		try {
 			PreparedStatement stmt = db.prepareStatement("SELECT * FROM Cookbook WHERE id=?");

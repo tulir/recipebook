@@ -1,7 +1,9 @@
 package net.maunium.recipebook;
 
+import net.maunium.recipebook.api.IngredientAPI;
 import net.maunium.recipebook.model.*;
-import spark.Spark;
+import net.maunium.recipebook.util.JSON;
+import static spark.Spark.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -31,8 +33,20 @@ public class RecipeBook {
 		RecipePart.db = db;
 		Cookbook.db = db;
 		CookbookEntry.db = db;
-		Spark.port(8080);
-		Spark.get("/hello", (req, res) -> "Hello World");
+
+		port(8080);
+		staticFileLocation("/public");
+
+		path("/api", () -> {
+			path("/ingredient", () -> {
+				get("/list", IngredientAPI::list, JSON.transformer());
+				post("/add", IngredientAPI::add, JSON.transformer());
+				put("/:id", IngredientAPI::rename, JSON.transformer());
+				delete("/:id", IngredientAPI::delete, JSON.transformer());
+			});
+		});
+
+		System.out.println("Running at http://localhost:8080");
 	}
 
 	public void createTables() throws SQLException {
