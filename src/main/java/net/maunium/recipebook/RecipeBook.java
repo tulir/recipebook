@@ -25,8 +25,11 @@ public class RecipeBook {
 			e.printStackTrace();
 			return;
 		}
-		Recipe.db = db;
 		Ingredient.db = db;
+		Recipe.db = db;
+		RecipePart.db = db;
+		Cookbook.db = db;
+		CookbookEntry.db = db;
 		Spark.port(8080);
 		Spark.get("/hello", (req, res) -> "Hello World");
 	}
@@ -36,6 +39,7 @@ public class RecipeBook {
 		stmt.execute("CREATE TABLE IF NOT EXISTS Recipe (" +
 				"id          INTEGER      PRIMARY KEY," +
 				"name        VARCHAR(255) NOT NULL," +
+				"author      VARCHAR(255) NOT NULL," +
 				"description VARCHAR(255) NOT NULL" +
 			")");
 		stmt.execute("CREATE TABLE IF NOT EXISTS Ingredient (" +
@@ -52,15 +56,16 @@ public class RecipeBook {
 				"FOREIGN KEY (ingredient) REFERENCES Ingredient(id)," +
 				"FOREIGN KEY (recipe)     REFERENCES Recipe(id)" +
 			")");
-		stmt.execute("CREATE TABLE IF NOT EXISTS RecipeBookEntry (" +
+		stmt.execute("CREATE TABLE IF NOT EXISTS CookbookEntry (" +
 				"book   INTEGER NOT NULL," +
 				"recipe INTEGER NOT NULL," +
-				"FOREIGN KEY (book)   REFERENCES RecipeBook(id)," +
+				"FOREIGN KEY (book)   REFERENCES Cookbook(id)," +
 				"FOREIGN KEY (recipe) REFERENCES Recipe(id)" +
 			")");
-		stmt.execute("CREATE TABLE IF NOT EXISTS RecipeBook (" +
-				"id          INTEGER PRIMARY KEY," +
+		stmt.execute("CREATE TABLE IF NOT EXISTS Cookbook (" +
+				"id          INTEGER      PRIMARY KEY," +
 				"name        VARCHAR(255) NOT NULL," +
+				"author      VARCHAR(255) NOT NULL," +
 				"description VARCHAR(255) NOT NULL" +
 			")");
 	}

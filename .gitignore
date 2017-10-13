@@ -7,4 +7,5 @@ recipebook.db
 .idea/uiDesigner.xml
 .idea/dynamic.xml
 .idea/dataSources/
+.idea/dataSources.xml
 .idea/dataSources.local.xml
