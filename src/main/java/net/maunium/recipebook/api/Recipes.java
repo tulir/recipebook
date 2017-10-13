@@ -1,6 +1,8 @@
 package net.maunium.recipebook.api;
 
 import net.maunium.recipebook.model.Recipe;
+import net.maunium.recipebook.util.ErrorMessage;
+import net.maunium.recipebook.util.JSON;
 import spark.Request;
 import spark.Response;
 
@@ -10,9 +12,9 @@ public class Recipes {
 	}
 
 	public static Object add(Request request, Response response) {
-    	Recipe recipe = JSON.parseJSON(request.body(), Recipe.class);
-    	recipe.insert();
-    	return recipe;
+		Recipe r = JSON.parseJSON(request.body(), Recipe.class);
+		r.insert();
+		return r;
 	}
 
 	public static Object get(Request request, Response response) {
@@ -24,15 +26,27 @@ public class Recipes {
 			return new ErrorMessage("Invalid recipe ID");
 		}
 
-		Recipe recipe = JSON.parseJSON(request.body(), Recipe.class);
-		recipe.id = id;
-		recipe.update();
-		return recipe;
+		Recipe r = Recipe.get(id);
+		if (r == null) {
+			response.status(404);
+			return new ErrorMessage("Recipe not found");
+		}
+		return r;
 	}
 
 	public static Object edit(Request request, Response response) {
-		// TODO edit recipe.
-		// returns edited Recipe
+		int id;
+		try {
+			id = Integer.parseInt(request.params("id"));
+		} catch (NumberFormatException e) {
+			response.status(400);
+			return new ErrorMessage("Invalid recipe ID");
+		}
+
+		Recipe r = JSON.parseJSON(request.body(), Recipe.class);
+		r.id = id;
+		r.update();
+		return r;
 	}
 
 	public static Object delete(Request request, Response response) {
@@ -44,8 +58,12 @@ public class Recipes {
 			return new ErrorMessage("Invalid recipe ID");
 		}
 
-		Recipe recipe = Recipe.get(id);
-		recipe.delete();
+		Recipe r = Recipe.get(id);
+		if (r == null) {
+			response.status(404);
+			return new ErrorMessage("Recipe not found");
+		}
+		r.delete();
 		response.status(204);
 		return null;
 	}

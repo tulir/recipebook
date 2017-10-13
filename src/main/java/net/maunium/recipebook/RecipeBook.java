@@ -68,22 +68,23 @@ public class RecipeBook {
 	public void createTables() throws SQLException {
 		Statement stmt = db.createStatement();
 		stmt.execute("CREATE TABLE IF NOT EXISTS Recipe (" +
-				"id          INTEGER      PRIMARY KEY," +
-				"name        VARCHAR(255) NOT NULL," +
-				"author      VARCHAR(255) NOT NULL," +
-				"description VARCHAR(255) NOT NULL" +
+				"id           INTEGER      PRIMARY KEY," +
+				"name         VARCHAR(255) NOT NULL," +
+				"author       VARCHAR(255) NOT NULL," +
+				"description  VARCHAR(255) NOT NULL," +
+				"instructions TEXT         NOT NULL" +
 			")");
 		stmt.execute("CREATE TABLE IF NOT EXISTS Ingredient (" +
 				"id   INTEGER      PRIMARY KEY," +
 				"name VARCHAR(255) NOT NULL" +
 			")");
 		stmt.execute("CREATE TABLE IF NOT EXISTS RecipePart (" +
-				"ingredient  INTEGER    NOT NULL," +
-				"recipe      INTEGER    NOT NULL," +
-				"`order`     INTEGER    NOT NULL," +
-				"amount      INTEGER    NOT NULL," +
-				"unit        VARCHAR(5) NOT NULL," +
-				"instruction TEXT       NOT NULL," +
+				"ingredient   INTEGER      NOT NULL," +
+				"recipe       INTEGER      NOT NULL," +
+				"`order`      INTEGER      NOT NULL," +
+				"amount       INTEGER      NOT NULL," +
+				"unit         VARCHAR(5)   NOT NULL," +
+				"instructions VARCHAR(255)," +
 				"FOREIGN KEY (ingredient) REFERENCES Ingredient(id)," +
 				"FOREIGN KEY (recipe)     REFERENCES Recipe(id)" +
 			")");

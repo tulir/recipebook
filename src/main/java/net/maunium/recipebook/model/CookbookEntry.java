@@ -37,24 +37,50 @@ public class CookbookEntry {
 		}
 	}
 
+	public static int[] insertAllIDs(Cookbook cookbook, List<Integer> recipeIDs) {
+		try {
+			PreparedStatement stmt = db.prepareStatement("INSERT INTO CookbookEntry VALUES (?, ?)");
+			for (int recipeID : recipeIDs) {
+				stmt.setInt(1, cookbook.id);
+				stmt.setInt(2, recipeID);
+				stmt.addBatch();
+			}
+			return stmt.executeBatch();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return new int[]{};
+		}
+	}
+
 	public static List<Recipe> getAll(Cookbook cookbook) {
 		List<Recipe> recipes = new ArrayList<>();
 		try {
 			PreparedStatement stmt = db.prepareStatement("SELECT Recipe.* FROM CookbookEntry JOIN Recipe ON CookbookEntry.recipe = Recipe.id WHERE CookbookEntry.book = ?");
 			stmt.setInt(1, cookbook.id);
 
-			ResultSet results = stmt.executeQuery();
-			while(results.next()) {
-				int id = results.getInt("Recipe.id");
-				String name = results.getString("Recipe.name");
-				String description = results.getString("Recipe.description");
-				String author = results.getString("Recipe.author");
-				Recipe r = new Recipe(id, name, description, author);
-				recipes.add(r);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()) {
+				recipes.add(Recipe.read(rs));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return recipes;
+	}
+
+	public static List<Integer> getAllIDs(Cookbook cookbook) {
+		List<Integer> recipeIDs = new ArrayList<>();
+		try {
+			PreparedStatement stmt = db.prepareStatement("SELECT Recipe.id FROM CookbookEntry JOIN Recipe ON CookbookEntry.recipe = Recipe.id WHERE CookbookEntry.book = ?");
+			stmt.setInt(1, cookbook.id);
+
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()) {
+				recipeIDs.add(rs.getInt("id"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return recipeIDs;
 	}
 }

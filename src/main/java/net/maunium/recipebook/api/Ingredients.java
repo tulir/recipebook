@@ -42,6 +42,10 @@ public class Ingredients {
 		}
 
 		Ingredient ingredient = Ingredient.get(id);
+		if (ingredient == null) {
+			response.status(404);
+			return new ErrorMessage("Ingredient not found");
+		}
 		ingredient.delete();
 		response.status(204);
 		return null;

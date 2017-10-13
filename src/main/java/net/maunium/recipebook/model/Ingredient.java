@@ -72,7 +72,7 @@ public class Ingredient implements ISQLTableClass {
 	}
 
 	public static List<Ingredient> getAll() {
-		List<Ingredient> ingredients = new ArrayList<Ingredient>();
+		List<Ingredient> ingredients = new ArrayList<>();
 		try {
 			PreparedStatement stmt = db.prepareStatement("SELECT * FROM Ingredient");
 			ResultSet rs = stmt.executeQuery();
