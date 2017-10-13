@@ -10,15 +10,15 @@ import java.util.List;
 public class RecipePart {
 	public static Connection db;
 	public int order;
-	public Recipe recipe;
-	public Ingredient ingredient;
+	public transient Recipe recipe;
+	public int ingredientID;
 	public int amount;
 	public String unit, instruction;
 
-	public RecipePart(int order, Recipe recipe, Ingredient ingredient, int amount, String unit, String instruction) {
+	public RecipePart(int order, Recipe recipe, int ingredientID, int amount, String unit, String instruction) {
 		this.order = order;
 		this.recipe = recipe;
-		this.ingredient = ingredient;
+		this.ingredientID = ingredientID;
 		this.amount = amount;
 		this.unit = unit;
 		this.instruction = instruction;
@@ -42,7 +42,7 @@ public class RecipePart {
 			for (int i = 1; i <= parts.size(); i++) {
 				RecipePart part = parts.get(i-1);
 				part.order = i;
-				stmt.setInt(1, part.ingredient.id);
+				stmt.setInt(1, part.ingredientID);
 				stmt.setInt(2, recipe.id);
 				stmt.setInt(3, part.order);
 				stmt.setInt(4, part.amount);
@@ -60,21 +60,17 @@ public class RecipePart {
 	public static List<RecipePart> getAll(Recipe recipe) {
 		List<RecipePart> parts = new ArrayList<>();
 		try {
-			PreparedStatement stmt = db.prepareStatement("SELECT * FROM RecipePart, Ingredient WHERE RecipePart.recipe=? AND RecipePart.ingredient = Ingredient.id ORDER BY RecipePart.order ASC");
+			PreparedStatement stmt = db.prepareStatement("SELECT * FROM RecipePart WHERE RecipePart.recipe=? ORDER BY RecipePart.order ASC");
 			stmt.setInt(1, recipe.id);
 
 			ResultSet results = stmt.executeQuery();
 			while(results.next()) {
+				int ingredientID = results.getInt("RecipePart.ingredient");
 				int order = results.getInt("RecipePart.order");
 				int amount = results.getInt("RecipePart.amount");
 				String unit = results.getString("RecipePart.unit");
 				String instruction = results.getString("RecipePart.instruction");
-
-				int ingredientID = results.getInt("Ingredient.id");
-				String ingredientName = results.getString("Ingredient.name");
-				Ingredient ingredient = new Ingredient(ingredientID, ingredientName);
-
-				parts.add(new RecipePart(order, recipe, ingredient, amount, unit, instruction));
+				parts.add(new RecipePart(order, recipe, ingredientID, amount, unit, instruction));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

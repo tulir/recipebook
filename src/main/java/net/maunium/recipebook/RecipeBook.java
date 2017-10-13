@@ -1,6 +1,7 @@
 package net.maunium.recipebook;
 
 import net.maunium.recipebook.api.Ingredients;
+import net.maunium.recipebook.api.Recipes;
 import net.maunium.recipebook.model.*;
 import net.maunium.recipebook.util.JSON;
 import static spark.Spark.*;
@@ -42,9 +43,14 @@ public class RecipeBook {
 				get("/list", Ingredients::list, JSON.transformer());
 				post("/add", Ingredients::add, JSON.transformer());
 				put("/:id", Ingredients::rename, JSON.transformer());
-				delete("/:id", Ingredients::delete, JSON.transformer());
+				delete("/:id", Ingredients::delete);
 			});
 			path("/recipe", () -> {
+				get("/list", Recipes::list, JSON.transformer());
+				post("/add", Recipes::add, JSON.transformer());
+				get("/:id", Recipes::get, JSON.transformer());
+				put("/:id", Recipes::edit, JSON.transformer());
+				delete("/:id", Recipes::delete);
 				// TODO Recipe API paths
 			});
 			path("/cookbook", () -> {
