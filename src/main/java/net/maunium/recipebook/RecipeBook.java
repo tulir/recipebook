@@ -1,5 +1,6 @@
 package net.maunium.recipebook;
 
+import net.maunium.recipebook.model.*;
 import spark.Spark;
 
 import java.sql.Connection;

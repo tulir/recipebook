@@ -1,4 +1,4 @@
-package net.maunium.recipebook;
+package net.maunium.recipebook.model;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CookbookEntry {
-	protected static Connection db;
+	public static Connection db;
 
 	public static int deleteAll(Cookbook cookbook) {
 		try {

@@ -1,12 +1,12 @@
-package net.maunium.recipebook;
+package net.maunium.recipebook.model;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Ingredient implements SQLTableClass {
-	protected static Connection db;
+public class Ingredient implements ISQLTableClass {
+	public static Connection db;
 	public int id;
 	public String name;
 
