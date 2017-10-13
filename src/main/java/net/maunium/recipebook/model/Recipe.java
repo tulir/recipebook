@@ -111,23 +111,4 @@ public class Recipe implements ISQLTableClass {
 		}
 		return recipes;
 	}
-
-	public static List<Recipe> getAll() {
-		List<Recipe> recipes = new ArrayList<Recipe>();
-		try {
-			PreparedStatement stmt = db.prepareStatement("SELECT * FROM Recipe");
-			ResultSet rs = stmt.executeQuery();
-
-			while(rs.next()) {
-				int id = rs.getInt("id");
-				String name = rs.getString("name");
-				String description = rs.getString("description");
-				String author = rs.getString("author");
-				recipes.add(new Recipe(id, name, description, author;));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return recipes;
-	}
 }
