@@ -24,11 +24,11 @@ public class RecipePart {
 		this.instruction = instruction;
 	}
 
-	public static int deleteAll(Recipe r) {
+	public static int deleteAll(Recipe recipe) {
 		try {
 			PreparedStatement stmt = db.prepareStatement(
 				"DELETE FROM RecipePart WHERE recipe = ?");
-			stmt.setInt(1, r.id);
+			stmt.setInt(1, recipe.id);
 			return stmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -36,14 +36,14 @@ public class RecipePart {
 		}
 	}
 
-	public static int[] insertAll(Recipe r, List<RecipePart> parts) {
+	public static int[] insertAll(Recipe recipe, List<RecipePart> parts) {
 		try {
 			PreparedStatement stmt = db.prepareStatement("INSERT INTO RecipePart (ingredient, recipe, order, amount, unit, instruction) VALUES (?, ?, ?, ?, ?, ?)");
 			for (int i = 0; i < parts.size(); i++) {
 				RecipePart part = parts.get(i);
 				part.order = i;
 				stmt.setInt(1, part.ingredient.id);
-				stmt.setInt(2, r.id);
+				stmt.setInt(2, recipe.id);
 				stmt.setInt(3, part.order);
 				stmt.setInt(4, part.amount);
 				stmt.setString(5, part.unit);
@@ -57,11 +57,11 @@ public class RecipePart {
 		}
 	}
 
-	public static List<RecipePart> getAll(Recipe r) {
+	public static List<RecipePart> getAll(Recipe recipe) {
 		List<RecipePart> parts = new ArrayList<>();
 		try {
 			PreparedStatement stmt = db.prepareStatement("SELECT * FROM RecipePart, Ingredient WHERE RecipePart.recipe=? AND RecipePart.ingredient = Ingredient.id");
-			stmt.setInt(1, r.id);
+			stmt.setInt(1, recipe.id);
 
 			ResultSet results = stmt.executeQuery();
 			while(results.next()) {
@@ -72,9 +72,9 @@ public class RecipePart {
 
 				int ingredientID = results.getInt("Ingredient.id");
 				String ingredientName = results.getString("Ingredient.name");
-				Ingredient ing = new Ingredient(ingredientID, ingredientName);
+				Ingredient ingredient = new Ingredient(ingredientID, ingredientName);
 
-				parts.add(new RecipePart(order, r, ing, amount, unit, instruction));
+				parts.add(new RecipePart(order, recipe, ingredient, amount, unit, instruction));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

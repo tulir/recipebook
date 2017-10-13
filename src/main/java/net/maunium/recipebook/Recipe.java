@@ -33,8 +33,8 @@ public class Recipe implements SQLTableClass {
 			stmt.setInt(4, id);
 			stmt.executeUpdate();
 			if (partsChanged) {
-				RecipePart.deleteAll(id);
-				RecipePart.insertAll(id, parts);
+				RecipePart.deleteAll(this);
+				RecipePart.insertAll(this, parts);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -52,7 +52,7 @@ public class Recipe implements SQLTableClass {
 			if (rs.next()) {
 				id = rs.getInt(1);
 			}
-			RecipePart.insertAll(id, parts);
+			RecipePart.insertAll(this, parts);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -75,7 +75,7 @@ public class Recipe implements SQLTableClass {
 
 			Recipe r = new Recipe(id, name, description, author);
 			if (getParts) {
-				r.parts = RecipePart.getAll(r.id);
+				r.parts = RecipePart.getAll(r);
 			}
 			return r;
 		} catch (SQLException e) {

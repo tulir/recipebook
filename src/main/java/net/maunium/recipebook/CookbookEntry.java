@@ -10,11 +10,11 @@ import java.util.List;
 public class CookbookEntry {
 	protected static Connection db;
 
-	public static int deleteAll(Cookbook cb) {
+	public static int deleteAll(Cookbook cookbook) {
 		try {
 			PreparedStatement stmt = db.prepareStatement(
 				"DELETE FROM CookbookEntry WHERE cookbook = ?");
-			stmt.setInt(1, cb.id);
+			stmt.setInt(1, cookbook.id);
 			return stmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -22,12 +22,12 @@ public class CookbookEntry {
 		}
 	}
 
-	public static int[] insertAll(Cookbook cb, List<Recipe> recipes) {
+	public static int[] insertAll(Cookbook cookbook, List<Recipe> recipes) {
 		try {
 			PreparedStatement stmt = db.prepareStatement("INSERT INTO CookbookEntry VALUES (?, ?)");
-			for (Recipe r : recipes) {
-				stmt.setInt(1, cb.id);
-				stmt.setInt(2, r.id);
+			for (Recipe recipe : recipes) {
+				stmt.setInt(1, cookbook.id);
+				stmt.setInt(2, recipe.id);
 				stmt.addBatch();
 			}
 			return stmt.executeBatch();
@@ -37,11 +37,11 @@ public class CookbookEntry {
 		}
 	}
 
-	public static List<Recipe> getAll(Cookbook cb) {
+	public static List<Recipe> getAll(Cookbook cookbook) {
 		List<Recipe> recipes = new ArrayList<>();
 		try {
 			PreparedStatement stmt = db.prepareStatement("SELECT Recipe.* FROM CookbookEntry JOIN Recipe ON CookbookEntry.recipe = Recipe.id WHERE CookbookEntry.book = ?");
-			stmt.setInt(1, cb.id);
+			stmt.setInt(1, cookbook.id);
 
 			ResultSet results = stmt.executeQuery();
 			while(results.next()) {
