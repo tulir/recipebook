@@ -1,23 +1,22 @@
 package net.maunium.recipebook;
 
-import net.maunium.recipebook.api.Cookbooks;
-import net.maunium.recipebook.api.Ingredients;
-import net.maunium.recipebook.api.Recipes;
+import net.maunium.recipebook.api.*;
 import net.maunium.recipebook.model.*;
 import net.maunium.recipebook.util.JSON;
-import static spark.Spark.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import static spark.Spark.*;
+
 /**
  * RecipeBook is the main class of this program.
  * It creates the database connection and sets up Spark.
  *
- * @project RecipeBook
  * @author Tulir Asokan
+ * @project RecipeBook
  */
 public class RecipeBook {
 	/**
@@ -92,6 +91,7 @@ public class RecipeBook {
 
 	/**
 	 * Create all necessary database tables.
+	 *
 	 * @throws SQLException If a CREATE TABLE statement execution fails.
 	 */
 	public void createTables() throws SQLException {
