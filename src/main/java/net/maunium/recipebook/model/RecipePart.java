@@ -7,6 +7,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * RecipePart contains information about a certain part of a recipe.
+ *
+ * However, it is a linking database table, which means that it does not
+ * implement {@link ISQLTableClass} and the methods are intended to be
+ * used only by {@link Recipe}.
+ *
+ * @author Tulir Asokan
+ * @project RecipeBook
+ */
 public class RecipePart {
 	public static Connection db;
 	public int order;

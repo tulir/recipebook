@@ -7,6 +7,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Cookbook contains information about a single cookbook.
+ *
+ * @author Tulir Asokan
+ * @project RecipeBook
+ */
 public class Cookbook implements ISQLTableClass {
 	public static Connection db;
 	public int id;

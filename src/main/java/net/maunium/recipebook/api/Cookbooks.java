@@ -6,6 +6,12 @@ import net.maunium.recipebook.util.JSON;
 import spark.Request;
 import spark.Response;
 
+/**
+ * Cookbooks contains handlers for /api/cookbook/ endpoints.
+ *
+ * @author Tulir Asokan
+ * @project RecipeBook
+ */
 public class Cookbooks {
 	public static Object list(Request request, Response response) {
 		return Cookbook.getAll();

@@ -7,6 +7,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * CookbookEntry is an utility class to access recipes in a cookbook.
+ *
+ * @author Tulir Asokan
+ * @project RecipeBook
+ */
 public class CookbookEntry {
 	public static Connection db;
 

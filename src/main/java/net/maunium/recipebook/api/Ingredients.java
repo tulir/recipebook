@@ -6,6 +6,12 @@ import net.maunium.recipebook.util.JSON;
 import spark.Request;
 import spark.Response;
 
+/**
+ * Ingredients contains handlers for /api/ingredient/ endpoints.
+ *
+ * @author Tulir Asokan
+ * @project RecipeBook
+ */
 public class Ingredients {
 	public static Object list(Request request, Response response) {
 		return Ingredient.getAll();

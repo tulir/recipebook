@@ -7,6 +7,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Ingredient contains information about a single ingredient.
+ *
+ * @author Tulir Asokan
+ * @project RecipeBook
+ */
 public class Ingredient implements ISQLTableClass {
 	public static Connection db;
 	public int id;

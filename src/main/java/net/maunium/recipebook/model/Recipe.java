@@ -7,6 +7,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Recipe contains information about a single recipe.
+ *
+ * @author Tulir Asokan
+ * @project RecipeBook
+ */
 public class Recipe implements ISQLTableClass {
 	public static Connection db;
 	public int id;

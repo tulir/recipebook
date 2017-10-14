@@ -3,6 +3,12 @@ package net.maunium.recipebook.util;
 import com.google.gson.Gson;
 import spark.ResponseTransformer;
 
+/**
+ * JSON offers simple static functions to access Gson.
+ *
+ * @author Tulir Asokan
+ * @project RecipeBook
+ */
 public class JSON {
 	private static final Gson gson = new Gson();
 

@@ -12,6 +12,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * RecipeBook is the main class of this program.
+ * It creates the database connection and sets up Spark.
+ *
+ * @project RecipeBook
+ * @author Tulir Asokan
+ */
 public class RecipeBook {
 	public Connection db;
 
