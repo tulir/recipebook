@@ -37,7 +37,7 @@ public class RecipeBook {
 		CookbookEntry.db = db;
 
 		port(8080);
-		staticFileLocation("/");
+		staticFileLocation("/build");
 
 		path("/api", () -> {
 			path("/ingredient", () -> {
