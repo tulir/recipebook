@@ -20,32 +20,52 @@ import java.sql.Statement;
  * @author Tulir Asokan
  */
 public class RecipeBook {
+	/**
+	 * The database connection used.
+	 */
 	public Connection db;
 
+	/**
+	 * Create and initialize the RecipeBook.
+	 */
 	public RecipeBook() {
 		db = null;
 		try {
 			db = DriverManager.getConnection("jdbc:sqlite:recipebook.db");
 		} catch (SQLException e) {
+			System.out.println("[Fatal] Failed to connect to database:");
 			e.printStackTrace();
 			return;
 		}
+
 		try {
 			createTables();
 		} catch (SQLException e) {
-			System.out.println("Failed to create tables:");
+			System.out.println("[Fatal] Failed to create tables:");
 			e.printStackTrace();
 			return;
 		}
+
+		// Share database object to model classes.
 		Ingredient.db = db;
 		Recipe.db = db;
 		RecipePart.db = db;
 		Cookbook.db = db;
 		CookbookEntry.db = db;
 
+		// Set up Spark.
 		port(8080);
 		staticFileLocation("/webapp");
+		setupSparkRoutes();
 
+		// All done.
+		System.out.println("Running at http://localhost:8080");
+	}
+
+	/**
+	 * Set up all Spark API endpoints.
+	 */
+	public void setupSparkRoutes() {
 		path("/api", () -> {
 			path("/ingredient", () -> {
 				get("/list", Ingredients::list, JSON.transformer());
@@ -68,10 +88,12 @@ public class RecipeBook {
 				delete("/:id", Cookbooks::delete);
 			});
 		});
-
-		System.out.println("Running at http://localhost:8080");
 	}
 
+	/**
+	 * Create all necessary database tables.
+	 * @throws SQLException If a CREATE TABLE statement execution fails.
+	 */
 	public void createTables() throws SQLException {
 		Statement stmt = db.createStatement();
 		stmt.execute("CREATE TABLE IF NOT EXISTS Recipe (" +
@@ -109,6 +131,9 @@ public class RecipeBook {
 			")");
 	}
 
+	/**
+	 * Main function. Calls {@link RecipeBook#RecipeBook()}
+	 */
 	public static void main(String[] args) {
 		new RecipeBook();
 	}
