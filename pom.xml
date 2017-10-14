@@ -6,7 +6,37 @@
 
 	<groupId>net.maunium.tikape</groupId>
 	<artifactId>recipebook</artifactId>
-	<version>1.0</version>
+	<version>1.0.0</version>
+
+	<name>RecipeBook</name>
+	<description>An Introduction to Databases exercise project with Java Spark and React</description>
+	<url>https://github.com/tulir/tikape-recipebook</url>
+	<organization>
+		<name>Maunium</name>
+		<url>https://maunium.net</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>GNU General Public License, Version 3</name>
+			<url>https://www.gnu.org/licenses/gpl-3.0-standalone.html</url>
+			<distribution>manual</distribution>
+			<comments>A free, copyleft license for software and other kinds of works</comments>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<id>tulir</id>
+			<name>Tulir Asokan</name>
+			<email>tulir@maunium.net</email>
+			<url>https://maunium.net</url>
+			<organization>Maunium</organization>
+			<roles>
+				<role>architect</role>
+				<role>developer</role>
+			</roles>
+			<timezone>Europe/Helsinki</timezone>
+		</developer>
+	</developers>
 
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
@@ -24,7 +54,7 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
-			<version>1.7.25</version>
+			<version>1.7.13</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
@@ -106,4 +136,13 @@
 			</plugin>
 		</plugins>
 	</build>
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.0.0-M1</version>
+			</plugin>
+		</plugins>
+	</reporting>
 </project>

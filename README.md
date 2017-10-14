@@ -1,5 +1,5 @@
 # RecipeBook
-A recipe system that uses Java Spark and React.
+An Introduction to Databases exercise project with Java Spark and React
 
 ## Structure
 ```
