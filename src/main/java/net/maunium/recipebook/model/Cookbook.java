@@ -41,13 +41,19 @@ public class Cookbook implements ISQLTableClass {
 		this.author = author;
 	}
 
+	public void write(PreparedStatement stmt, boolean writeID) throws SQLException {
+		stmt.setString(1, name);
+		stmt.setString(2, description);
+		stmt.setString(3, author);
+		if (writeID) {
+			stmt.setInt(4, id);
+		}
+	}
+
 	public void update() {
 		try {
 			PreparedStatement stmt = db.prepareStatement("UPDATE Cookbook SET name=?, description=?, author=? WHERE id=?");
-			stmt.setString(1, name);
-			stmt.setString(2, description);
-			stmt.setString(3, author);
-			stmt.setInt(4, id);
+			write(stmt, true);
 			int changed = stmt.executeUpdate();
 
 			CookbookEntry.deleteAll(this);
@@ -60,14 +66,8 @@ public class Cookbook implements ISQLTableClass {
 	public void insert() {
 		try {
 			PreparedStatement stmt = db.prepareStatement("INSERT INTO Cookbook (name, description, author) VALUES (?, ?, ?)");
-			stmt.setString(1, name);
-			stmt.setString(2, description);
-			stmt.setString(3, author);
-			stmt.executeUpdate();
-			ResultSet rs = stmt.getGeneratedKeys();
-			if(rs.next()) {
-				id = rs.getInt(1);
-			}
+			write(stmt, false);
+			id = ISQLTableClass.insertAndGetID(stmt);
 			CookbookEntry.insertAllIDs(this, recipes);
 		} catch (SQLException e) {
 			e.printStackTrace();

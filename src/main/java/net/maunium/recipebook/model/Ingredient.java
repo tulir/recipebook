@@ -57,11 +57,7 @@ public class Ingredient implements ISQLTableClass {
 		try {
 			PreparedStatement stmt = db.prepareStatement("INSERT INTO Ingredient (name) VALUES (?)");
 			stmt.setString(1, name);
-			stmt.executeUpdate();
-			ResultSet rs = stmt.getGeneratedKeys();
-			if(rs.next()) {
-				id = rs.getInt(1);
-			}
+			id = ISQLTableClass.insertAndGetID(stmt);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

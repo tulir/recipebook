@@ -38,16 +38,19 @@ public class Cookbooks {
 		return cb;
 	}
 
-	public static Object get(Request request, Response response) {
+	private static Cookbook getCookbook(Request request) {
 		int id;
 		try {
 			id = Integer.parseInt(request.params("id"));
 		} catch (NumberFormatException e) {
-			response.status(400);
-			return new ErrorMessage("Invalid cookbook ID");
+			return null;
 		}
 
-		Cookbook cb = Cookbook.get(id);
+		return Cookbook.get(id);
+	}
+
+	public static Object get(Request request, Response response) {
+		Cookbook cb = getCookbook(request);
 		if (cb == null) {
 			response.status(404);
 			return new ErrorMessage("Cookbook not found");
@@ -56,30 +59,20 @@ public class Cookbooks {
 	}
 
 	public static Object edit(Request request, Response response) {
-		int id;
-		try {
-			id = Integer.parseInt(request.params("id"));
-		} catch (NumberFormatException e) {
-			response.status(400);
-			return new ErrorMessage("Invalid cookbook ID");
+		Cookbook oldCookbook = getCookbook(request);
+		if (oldCookbook == null) {
+			response.status(404);
+			return new ErrorMessage("Cookbook not found");
 		}
 
 		Cookbook cb = JSON.parseJSON(request.body(), Cookbook.class);
-		cb.id = id;
+		cb.id = oldCookbook.id;
 		cb.update();
 		return cb;
 	}
 
 	public static Object delete(Request request, Response response) {
-		int id;
-		try {
-			id = Integer.parseInt(request.params("id"));
-		} catch (NumberFormatException e) {
-			response.status(400);
-			return new ErrorMessage("Invalid cookbook ID");
-		}
-
-		Cookbook cb = Cookbook.get(id);
+		Cookbook cb = getCookbook(request);
 		if (cb == null) {
 			response.status(404);
 			return new ErrorMessage("Cookbook not found");

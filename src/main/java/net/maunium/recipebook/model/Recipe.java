@@ -42,6 +42,16 @@ public class Recipe implements ISQLTableClass {
 		this.instructions = instructions;
 	}
 
+	public void write(PreparedStatement stmt, boolean writeID) throws SQLException {
+		stmt.setString(1, name);
+		stmt.setString(2, description);
+		stmt.setString(3, author);
+		stmt.setString(4, instructions);
+		if (writeID) {
+			stmt.setInt(5, id);
+		}
+	}
+
 	public void update() {
 		update(true);
 	}
@@ -49,11 +59,7 @@ public class Recipe implements ISQLTableClass {
 	public void update(boolean partsChanged) {
 		try {
 			PreparedStatement stmt = db.prepareStatement("UPDATE Recipe SET name=?, description=?, author=?, instructions=? WHERE id = ?");
-			stmt.setString(1, name);
-			stmt.setString(2, description);
-			stmt.setString(3, author);
-			stmt.setString(4, instructions);
-			stmt.setInt(4, id);
+			write(stmt, true);
 			stmt.executeUpdate();
 			if (partsChanged) {
 				RecipePart.deleteAll(this);
@@ -67,15 +73,8 @@ public class Recipe implements ISQLTableClass {
 	public void insert() {
 		try {
 			PreparedStatement stmt = db.prepareStatement("INSERT INTO Recipe (name, description, author, instructions) VALUES (?, ?, ?, ?)");
-			stmt.setString(1, name);
-			stmt.setString(2, description);
-			stmt.setString(3, author);
-			stmt.setString(4, instructions);
-			stmt.executeUpdate();
-			ResultSet rs = stmt.getGeneratedKeys();
-			if (rs.next()) {
-				id = rs.getInt(1);
-			}
+			write(stmt, false);
+			id = ISQLTableClass.insertAndGetID(stmt);
 			RecipePart.insertAll(this, parts);
 		} catch (SQLException e) {
 			e.printStackTrace();

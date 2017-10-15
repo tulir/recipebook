@@ -38,31 +38,32 @@ public class Ingredients {
 		return ingredient;
 	}
 
-	public static Object rename(Request request, Response response) {
+	private static Ingredient getIngredient(Request request) {
 		int id;
 		try {
 			id = Integer.parseInt(request.params("id"));
 		} catch (NumberFormatException e) {
-			response.status(400);
-			return new ErrorMessage("Invalid ingredient ID");
+			return null;
+		}
+
+		return Ingredient.get(id);
+	}
+
+	public static Object rename(Request request, Response response) {
+		Ingredient oldIngredient = getIngredient(request);
+		if (oldIngredient == null) {
+			response.status(404);
+			return new ErrorMessage("Ingredient not found");
 		}
 
 		Ingredient ingredient = JSON.parseJSON(request.body(), Ingredient.class);
-		ingredient.id = id;
+		ingredient.id = oldIngredient.id;
 		ingredient.update();
 		return ingredient;
 	}
 
 	public static Object delete(Request request, Response response) {
-		int id;
-		try {
-			id = Integer.parseInt(request.params("id"));
-		} catch (NumberFormatException e) {
-			response.status(400);
-			return new ErrorMessage("Invalid ingredient ID");
-		}
-
-		Ingredient ingredient = Ingredient.get(id);
+		Ingredient ingredient = getIngredient(request);
 		if (ingredient == null) {
 			response.status(404);
 			return new ErrorMessage("Ingredient not found");
