@@ -36,6 +36,12 @@
 			</roles>
 			<timezone>Europe/Helsinki</timezone>
 		</developer>
+		<developer>
+			<id>xylix</id>
+			<name>Kerkko Pelttari</name>
+			<email>kerk.pelt@gmail.com</email>
+			<url>https://xylix.me</url>
+			<timezone>Europe/Helsinki</timezone>
 	</developers>
 
 	<properties>
