@@ -1,8 +1,19 @@
-import React, { Component } from "react"
+import React, {Component} from "react"
 import PartEditor from "./parteditor"
 import "./recipeeditor.sass"
+import PropTypes from "prop-types"
 
 class RecipeEditor extends Component {
+	static childContextTypes = {
+		deletePart: PropTypes.func
+	}
+
+	getChildContext() {
+		return {
+			deletePart: this.deletePart
+		}
+	}
+
 	constructor(props) {
 		super(props)
 		this.state = {parts: []}
@@ -15,6 +26,8 @@ class RecipeEditor extends Component {
 		}
 		this.handleInputChange = this.handleInputChange.bind(this)
 		this.addPart = this.addPart.bind(this)
+		this.deletePart = this.deletePart.bind(this)
+		this.save = this.save.bind(this)
 	}
 
 	handleInputChange(event) {
@@ -23,7 +36,7 @@ class RecipeEditor extends Component {
 
 	render() {
 		return (
-			<form className="recipe-editor" onSubmit={this.save}>
+			<form action="#" className="recipe-editor" onSubmit={this.save}>
 				<div className="field">
 					<label htmlFor="name">Name</label>
 					<input name="name" value={this.state.name} onChange={this.handleInputChange}/>
@@ -38,7 +51,8 @@ class RecipeEditor extends Component {
 				</div>
 				<div className="field">
 					<label htmlFor="instructions">Instructions</label>
-					<textarea rows="8" name="instructions" value={this.state.instructions} onChange={this.handleInputChange}/>
+					<textarea rows="8" name="instructions" value={this.state.instructions}
+							  onChange={this.handleInputChange}/>
 				</div>
 
 				<div className="part-editors">
@@ -56,9 +70,31 @@ class RecipeEditor extends Component {
 	}
 
 	addPart() {
+		const blankPart = {
+			ingredient: {
+				props: {
+					id: 1
+				}
+			}
+		}
 		this.setState({
-			parts: this.state.parts.concat([{}])
+			parts: this.state.parts.concat([blankPart])
 		})
+	}
+
+	deletePart(ptd) {
+		const parts = this.state.parts
+		ptd = ptd.props
+		for (const [index, part] of Object.entries(parts)) {
+			if (part.amount === ptd.amount
+				&& part.unit === ptd.unit
+				&& part.instructions === ptd.instructions
+				&& part.ingredient.props.id === ptd.ingredient.props.id) {
+				delete parts[index]
+				this.setState({parts})
+				return
+			}
+		}
 	}
 
 	save(event) {
