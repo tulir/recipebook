@@ -1,12 +1,17 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 
-class RecipePart extends Component {
+class RecipePart extends PureComponent {
 	render() {
 		return (
 			<div className="recipe-part">
-				{this.props.amount} {this.props.unit} of {this.props.ingredient.name}
-
-				{this.props.instructions}
+				<span className="amount">
+					{this.props.amount}
+				</span> <span className="unit">
+					{this.props.unit}
+				</span> of <span className="ingredient">
+					{this.props.ingredient.renderName()}
+				</span>
+				<span className="instructions">{this.props.instructions}</span>
 			</div>
 		)
 	}

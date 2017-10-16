@@ -36,8 +36,9 @@ class RecipeBook extends Component {
 					for (const part of recipe.parts) {
 						const ingredient = this.state.ingredients.get(part.ingredientID)
 						part.ingredient = ingredient
+						console.log(ingredient)
 						delete part.ingredientID
-						parts[part.order] = new RecipePart(part)
+						parts.push(new RecipePart(part))
 					}
 					recipe.parts = parts
 					recipes.push(new Recipe(recipe))
@@ -47,14 +48,12 @@ class RecipeBook extends Component {
 	}
 
 	render() {
-		const recipes = this.state.recipes
-		console.log(recipes)
 		return (
 			<div className="recipebook">
 				<header>RecipeBook</header>
 
 				<div className="recipes">
-					{recipes}
+					{this.state.recipes.map(recipe => recipe.render())}
 				</div>
 
 				<footer>

@@ -1,0 +1,21 @@
+@import ../vars
+
+.recipe
+	background-color: $main-color
+	margin: .5rem 0
+	padding: 1rem
+	box-sizing: border-box
+	border-radius: .25rem
+
+	.name
+		font-weight: bold
+
+	.parts
+		margin: .5rem 0
+		> .recipe-part > .instructions
+			&:not(:empty):before
+				content: " - "
+			font-style: italic
+
+	.instructions
+		white-space: pre-wrap
