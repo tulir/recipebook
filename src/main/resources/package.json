@@ -88,5 +88,17 @@
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "proxy": {
+    "/api": {
+      "target": {
+        "host": "localhost",
+        "protocol": "http:",
+        "port": 8080
+      },
+      "ignorePath": true,
+      "changeOrigin": true,
+      "secure": false
+    }
   }
 }
