@@ -150,6 +150,20 @@ module.exports = {
               compact: true,
             },
           },
+          {
+            test: /\.svg$/,
+            use: [
+              {
+                loader: require.resolve("babel-loader"),
+              },
+              {
+                loader: require.resolve("react-svg-loader"),
+                options: {
+                  jsx: true,
+                },
+              },
+            ],
+          },
           // The notation here is somewhat confusing.
           // "postcss" loader applies autoprefixer to our CSS.
           // "css" loader resolves paths in CSS and adds assets as dependencies.
