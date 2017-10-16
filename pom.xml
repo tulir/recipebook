@@ -43,6 +43,12 @@
 			<url>https://xylix.me</url>
 			<timezone>Europe/Helsinki</timezone>
 		</developer>
+		<developer>
+			<id>Johneagle</id>
+			<name>Joni Kokko</name>
+			<email>eaglekjohn@gmail.com</email>
+			<timezone>Europe/Helsinki</timezone>
+		</developer>
 	</developers>
 
 	<properties>
