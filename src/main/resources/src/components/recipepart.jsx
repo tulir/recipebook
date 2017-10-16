@@ -1,19 +1,15 @@
 import React, { Component } from 'react'
 
-class Ingredient extends Component {
-	constructor(id, name) {
-		super()
-		this.id = id
-		this.name = name
-	}
-
+class RecipePart extends Component {
 	render() {
 		return (
-			<div className="ingredient">
+			<div className="recipe-part">
+				{this.props.amount} {this.props.unit} of {this.props.ingredient.name}
 
+				{this.props.instructions}
 			</div>
 		)
 	}
 }
 
-export default Ingredient
+export default RecipePart

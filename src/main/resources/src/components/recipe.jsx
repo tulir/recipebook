@@ -1,19 +1,19 @@
 import React, { Component } from 'react'
+import './recipe.sass'
 
-class Ingredient extends Component {
-	constructor(id, name) {
-		super()
-		this.id = id
-		this.name = name
-	}
-
+class Recipe extends Component {
 	render() {
 		return (
-			<div className="ingredient">
-
+			<div className="recipe">
+				<span className="name">{this.props.name}</span>
+				<span className="author">{this.props.author}</span>
+				<div className="parts">
+					{this.props.parts}
+				</div>
+				<span className="instructions">{this.props.instructions}</span>
 			</div>
 		)
 	}
 }
 
-export default Ingredient
+export default Recipe
