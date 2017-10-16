@@ -1,18 +1,43 @@
-import React, {Component} from 'react'
+import React, { Component } from "react"
+import PropTypes from "prop-types"
 import Ingredient from './components/ingredient'
-import RecipePart from './components/recipepart'
-import Recipe from './components/recipe'
+import RecipeEditor from './components/recipeeditor'
+import RecipeList from './components/recipelist'
 import './recipebook.sass'
 
 class RecipeBook extends Component {
+	static childContextTypes = {
+		ingredients: PropTypes.object,
+		recipes: PropTypes.array,
+		enterRecipeEditor: PropTypes.func,
+		enterIngredientList: PropTypes.func,
+		editRecipe: PropTypes.func,
+	}
+
+	getChildContext() {
+		return {
+			ingredients: this.state.ingredients,
+			recipes: this.state.recipes,
+			enterRecipeEditor: this.enterRecipeEditor,
+			enterIngredientList: this.enterIngredientList,
+			editRecipe: this.editRecipe,
+		}
+	}
+
 	constructor(props) {
 		super(props)
 		this.state = {
 			ingredients: new Map(),
-			recipes: []
+			recipes: [],
+			view: "recipelist",
+			recipeToEdit: {},
 		}
 		this.fetchIngredients()
-			.then(() => this.fetchRecipes())
+			.then(() => this.fetchRecipes()
+				.then(this.forceUpdate()))
+		this.enterRecipeEditor = this.enterRecipeEditor.bind(this)
+		this.enterIngredientList = this.enterIngredientList.bind(this)
+		this.editRecipe = this.editRecipe.bind(this)
 	}
 
 	fetchIngredients() {
@@ -30,20 +55,14 @@ class RecipeBook extends Component {
 	fetchRecipes() {
 		return fetch("api/recipe/list").then(response => response.json())
 			.then(data => {
-				const recipes = []
 				for (const recipe of data) {
-					const parts = []
 					for (const part of recipe.parts) {
 						const ingredient = this.state.ingredients.get(part.ingredientID)
 						part.ingredient = ingredient
-						console.log(ingredient)
 						delete part.ingredientID
-						parts.push(new RecipePart(part))
 					}
-					recipe.parts = parts
-					recipes.push(new Recipe(recipe))
 				}
-				this.setState({recipes})
+				this.setState({recipes: data})
 			}, err => console.log("Unexpected error:", err))
 	}
 
@@ -52,28 +71,29 @@ class RecipeBook extends Component {
 			<div className="recipebook">
 				<header>RecipeBook</header>
 
-				<div className="recipes">
-					{this.state.recipes.map(recipe => recipe.render())}
-				</div>
-
-				<footer>
-					<button onClick={this.newRecipe}>
-						New recipe
-					</button>
-					<button onClick={this.viewIngredients}>
-						View known ingredients
-					</button>
-				</footer>
+				{ this.state.view === "recipelist" ? <RecipeList recipes={this.state.recipes} enterRecipeEditor={this.enterRecipeEditor} enterIngredientList={this.enterIngredientList}/> : ""}
+				{ this.state.view === "recipeeditor" ? <RecipeEditor {...this.state.recipeToEdit}/> : ""}
+				{ this.state.view === "ingredientlist" ? <RecipeList/> : ""}
 			</div>
 		)
 	}
 
-	newRecipe() {
-
+	enterRecipeEditor() {
+		this.setState({
+			view: "recipeeditor",
+			recipeToEdit: {},
+		})
 	}
 
-	viewIngredients() {
+	enterIngredientList() {
+		this.setState({view: "ingredientlist"})
+	}
 
+	editRecipe(recipe) {
+		this.setState({
+			view: "recipeeditor",
+			recipeToEdit: recipe.props,
+		})
 	}
 }
 
