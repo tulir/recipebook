@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import PartEditor from "./parteditor"
+import "./recipeeditor.sass"
 
 class RecipeEditor extends Component {
 	constructor(props) {
@@ -37,15 +38,16 @@ class RecipeEditor extends Component {
 				</div>
 				<div className="field">
 					<label htmlFor="instructions">Instructions</label>
-					<textarea name="instructions" value={this.state.instructions} onChange={this.handleInputChange}/>
+					<textarea rows="8" name="instructions" value={this.state.instructions} onChange={this.handleInputChange}/>
 				</div>
 
 				<div className="part-editors">
 					{this.state.parts.map((part, index) => <PartEditor key={index} {...part}/>)}
-
-					<button type="button" className="add-part" onClick={this.addPart}>Add part</button>
 				</div>
 
+				<button type="button" className="add-part" onClick={this.addPart}>
+					Add
+				</button>
 				<button type="submit">
 					Save
 				</button>
@@ -59,7 +61,8 @@ class RecipeEditor extends Component {
 		})
 	}
 
-	save() {
+	save(event) {
+		event.stopPropagation()
 		// TODO implement saving
 	}
 }
