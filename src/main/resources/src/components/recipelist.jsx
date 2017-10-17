@@ -19,7 +19,7 @@ import PropTypes from "prop-types"
 
 class RecipeList extends PureComponent {
 	static contextTypes = {
-		enterIngredientList: PropTypes.func.isRequired,
+		listIngredients: PropTypes.func.isRequired,
 		newRecipe: PropTypes.func.isRequired,
 	}
 
@@ -33,7 +33,7 @@ class RecipeList extends PureComponent {
 					<button onClick={this.context.newRecipe}>
 						New recipe
 					</button>
-					<button onClick={this.context.enterIngredientList}>
+					<button onClick={this.context.listIngredients}>
 						View known ingredients
 					</button>
 				</footer>
