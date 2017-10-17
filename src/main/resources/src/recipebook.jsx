@@ -57,8 +57,7 @@ class RecipeBook extends Component {
 			currentRecipe: {},
 		}
 		this.fetchIngredients()
-			.then(() => this.fetchRecipes()
-				.then(this.forceUpdate()))
+			.then(() => this.fetchRecipes())
 
 		// Make sure the context functions are always called with this instance as the function context.
 		for (const [key, func] of Object.entries(this.getChildContext())) {
