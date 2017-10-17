@@ -13,12 +13,14 @@
 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
-import { PureComponent } from "react"
+import React, { PureComponent } from "react"
 
 class Ingredient extends PureComponent {
 	render() {
 		return (
-			this.props.name
+			<span className="ingredient">
+				{this.props.name}
+			</span>
 		)
 	}
 }

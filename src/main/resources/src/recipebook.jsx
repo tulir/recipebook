@@ -15,7 +15,6 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import React, { Component } from "react"
 import PropTypes from "prop-types"
-import Ingredient from './components/ingredient'
 import RecipeEditor from './components/editor/recipe'
 import RecipeList from './components/recipelist'
 import Recipe from './components/recipe'
@@ -29,11 +28,12 @@ const
 class RecipeBook extends Component {
 	static childContextTypes = {
 		ingredients: PropTypes.object,
-		recipes: PropTypes.array,
+		recipes: PropTypes.object,
 		newRecipe: PropTypes.func,
 		listIngredients : PropTypes.func,
 		editRecipe: PropTypes.func,
 		viewRecipe: PropTypes.func,
+		saveRecipe: PropTypes.func,
 	}
 
 	getChildContext() {
@@ -44,6 +44,7 @@ class RecipeBook extends Component {
 			listIngredients : this.listIngredients ,
 			editRecipe: this.editRecipe,
 			viewRecipe: this.viewRecipe,
+			saveRecipe: this.saveRecipe,
 		}
 	}
 
@@ -51,7 +52,7 @@ class RecipeBook extends Component {
 		super(props)
 		this.state = {
 			ingredients: new Map(),
-			recipes: [],
+			recipes: new Map(),
 			view: VIEW_RECIPE_LIST,
 			currentRecipe: {},
 		}
@@ -72,24 +73,30 @@ class RecipeBook extends Component {
 			.then(data => {
 				const ingredients = new Map()
 				for (const ingredient of data) {
-					ingredients.set(ingredient.id, new Ingredient(ingredient))
+					ingredients.set(ingredient.id, ingredient)
 				}
 				this.setState({ingredients})
 			})
 			.catch(err => console.log("Unexpected error:", err))
 	}
 
+	processRecipeFromServer(recipe) {
+		for (const part of recipe.parts) {
+			const ingredient = this.state.ingredients.get(part.ingredientID)
+			part.ingredient = ingredient
+			delete part.ingredientID
+		}
+	}
+
 	fetchRecipes() {
 		return fetch("api/recipe/list").then(response => response.json())
 			.then(data => {
+				const recipes = new Map()
 				for (const recipe of data) {
-					for (const part of recipe.parts) {
-						const ingredient = this.state.ingredients.get(part.ingredientID)
-						part.ingredient = ingredient
-						delete part.ingredientID
-					}
+					this.processRecipeFromServer(recipe)
+					recipes.set(recipe.id, recipe)
 				}
-				this.setState({recipes: data})
+				this.setState({recipes})
 			}, err => console.log("Unexpected error:", err))
 	}
 
@@ -98,7 +105,7 @@ class RecipeBook extends Component {
 			<div className="recipebook">
 				<header>RecipeBook</header>
 
-				{ this.state.view === VIEW_RECIPE_LIST ? <RecipeList recipes={this.state.recipes} enterRecipeEditor={this.enterRecipeEditor} enterIngredientList={this.enterIngredientList}/> : ""}
+				{ this.state.view === VIEW_RECIPE_LIST ? <RecipeList recipes={this.state.recipes}/> : ""}
 				{ this.state.view === VIEW_EDIT_RECIPE ? <RecipeEditor {...this.state.currentRecipe}/> : ""}
 				{ this.state.view === VIEW_VIEW_RECIPE ? <Recipe {...this.state.currentRecipe}/> : ""}
 				{ this.state.view === VIEW_INGREDIENT_LIST ? <RecipeList/> : ""}
@@ -117,22 +124,45 @@ class RecipeBook extends Component {
 		this.setState({view: VIEW_INGREDIENT_LIST})
 	}
 
-	editRecipe(recipe) {
-		const props = Object.assign({}, recipe.props)
-		delete props.listView
+	editRecipe(recipeID) {
+		const recipe = this.state.recipes.get(recipeID)
 		this.setState({
 			view: VIEW_EDIT_RECIPE,
-			currentRecipe: props,
+			currentRecipe: recipe,
 		})
 	}
 
-	viewRecipe(recipe) {
-		const props = Object.assign({}, recipe.props)
-		delete props.listView
+	viewRecipe(recipeID) {
+		const recipe = this.state.recipes.get(recipeID)
 		this.setState({
 			view: VIEW_VIEW_RECIPE,
-			currentRecipe: props,
+			currentRecipe: recipe,
 		})
+	}
+
+	saveRecipe(recipeID, newData) {
+		console.log(recipeID, newData)
+		let url = "api/recipe/add", method = "POST"
+		if (recipeID) {
+			url = `api/recipe/${recipeID}`
+			method = "PUT"
+		}
+		fetch(url, {
+			headers: {
+				"Content-Type": "application/json"
+			},
+			method,
+			body: JSON.stringify(newData)
+		}).then(response => response.json())
+			.then(data => {
+				this.processRecipeFromServer(data)
+				const recipes = this.state.recipes
+				recipes.set(data.id, data)
+
+				this.setState({recipes})
+				this.viewRecipe(data.id)
+			})
+			.catch(err => console.log("Unexpected error:", err))
 	}
 }
 

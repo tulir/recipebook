@@ -18,23 +18,19 @@ import PropTypes from "prop-types"
 
 class PartEditor extends Component {
 	static contextTypes = {
-		ingredients: PropTypes.object,
-		deletePart: PropTypes.func,
+		ingredients: PropTypes.object.isRequired,
+		deletePart: PropTypes.func.isRequired,
+		childInputChange: PropTypes.func.isRequired,
 	}
 
 	constructor(props, context) {
 		super(props, context)
 		this.state = Object.assign({
-			ingredient: {
-				props: {
-					id: 1
-				}
-			},
+			ingredient: { id: 1 },
 			unit: "",
 			amount: 0,
 			instructions: ""
 		}, props)
-
 		this.handleInputChange = this.handleInputChange.bind(this)
 		this.delete = this.delete.bind(this)
 	}
@@ -46,10 +42,11 @@ class PartEditor extends Component {
 			value = +value
 		}
 
+		const callback = () => this.context.childInputChange(this.props.index, Object.assign({}, this.state))
 		if (target === "ingredient") {
-			this.setState({ingredient: this.context.ingredients.get(+value)})
+			this.setState({ingredient: this.context.ingredients.get(+value)}, callback)
 		} else {
-			this.setState({[target]: value})
+			this.setState({[target]: value}, callback)
 		}
 	}
 
@@ -59,10 +56,10 @@ class PartEditor extends Component {
 				<input className="amount" placeholder="amount" name="amount" type="number" value={this.state.amount} onChange={this.handleInputChange}/>
 				<input className="unit" placeholder="unit" name="unit" value={this.state.unit} onChange={this.handleInputChange}/>
 				&nbsp;of&nbsp;
-				<select className="ingredient" name="ingredient" value={this.state.ingredient.props.id} onChange={this.handleInputChange}>
-					{Array.from(this.context.ingredients).map(([, ingredient]) => (
-						<option key={ingredient.props.id} value={ingredient.props.id}>
-							{ingredient.props.name}
+				<select className="ingredient" name="ingredient" value={this.state.ingredient.id} onChange={this.handleInputChange}>
+					{this.context.ingredients.map(ingredient => (
+						<option key={ingredient.id} value={ingredient.id}>
+							{ingredient.name}
 						</option>
 					))}
 				</select>
@@ -78,7 +75,7 @@ class PartEditor extends Component {
 	}
 
 	delete() {
-		this.context.deletePart(this)
+		this.context.deletePart(this.props.index)
 	}
 }
 

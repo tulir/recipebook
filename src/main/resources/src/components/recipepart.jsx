@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import React, { PureComponent } from "react"
+import Ingredient from "./ingredient"
 
 class RecipePart extends PureComponent {
 	render() {
@@ -23,9 +24,7 @@ class RecipePart extends PureComponent {
 					{this.props.amount}
 				</span> <span className="unit">
 					{this.props.unit}
-				</span> of <span className="ingredient">
-					{this.props.ingredient.render()}
-				</span>
+				</span> of <Ingredient {...this.props.ingredient}/>
 				<span className="instructions">{this.props.instructions}</span>
 			</div>
 		)

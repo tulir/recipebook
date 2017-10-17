@@ -19,12 +19,17 @@ import PropTypes from "prop-types"
 
 class RecipeEditor extends Component {
 	static childContextTypes = {
-		deletePart: PropTypes.func
+		deletePart: PropTypes.func,
+		childInputChange: PropTypes.func,
+	}
+	static contextTypes = {
+		saveRecipe: PropTypes.func,
 	}
 
 	getChildContext() {
 		return {
-			deletePart: this.deletePart
+			deletePart: this.deletePart,
+			childInputChange: this.childInputChange,
 		}
 	}
 
@@ -39,6 +44,7 @@ class RecipeEditor extends Component {
 			this.state = {name, author, description, instructions, parts}
 		}
 		this.handleInputChange = this.handleInputChange.bind(this)
+		this.childInputChange = this.childInputChange.bind(this)
 		this.addPart = this.addPart.bind(this)
 		this.deletePart = this.deletePart.bind(this)
 		this.save = this.save.bind(this)
@@ -46,6 +52,12 @@ class RecipeEditor extends Component {
 
 	handleInputChange(event) {
 		this.setState({[event.target.name]: event.target.value})
+	}
+
+	childInputChange(index, state) {
+		const parts = this.state.parts
+		parts[index] = state
+		this.setState({parts})
 	}
 
 	render() {
@@ -70,7 +82,7 @@ class RecipeEditor extends Component {
 				</div>
 
 				<div className="part-editors">
-					{this.state.parts.map((part, index) => <PartEditor key={index} {...part}/>)}
+					{this.state.parts.map((part, index) => <PartEditor index={index} key={index} {...part}/>)}
 				</div>
 
 				<div className="buttons">
@@ -88,55 +100,42 @@ class RecipeEditor extends Component {
 	addPart() {
 		const blankPart = {
 			// Preset the ingredient data so that we can expect it to always exist.
-			ingredient: {props: {id: 1}}
+			ingredient: {id: 1}
 		}
 		this.setState({
 			parts: this.state.parts.concat([blankPart])
 		})
 	}
 
-	deletePart(ptd) {
+	deletePart(index) {
 		const parts = this.state.parts
-		ptd = ptd.props
-		for (const [index, part] of Object.entries(parts)) {
-			if (part.amount === ptd.amount
-				&& part.unit === ptd.unit
-				&& part.instructions === ptd.instructions
-				&& part.ingredient.props.id === ptd.ingredient.props.id) {
-				delete parts[index]
-				this.setState({parts})
-				return
-			}
-		}
+		delete parts[index]
+		this.setState({parts})
 	}
 
 	save(event) {
 		event.preventDefault()
-		alert("Saving is not fully implemented and completely broken")
-		
 		const state = Object.assign({}, this.state)
-		// De-componentify ingredients
-		for (const part of state.parts) {
-			part.ingredientID = part.ingredient.props.id
+
+		// Delete empty slots
+		for (let i = 0; i < state.parts.length; i++) {
+			if (!state.parts[i]) {
+				state.parts.splice(i, 1)
+				i--
+			}
+		}
+
+		// Remove ingredient names
+		for (const [index, part] of Object.entries(state.parts)) {
+			part.ingredientID = part.ingredient.id
 			delete part.ingredient
 		}
 
-		let url = "api/recipe/add", method = "POST"
-		if (this.id) {
-			url = `api/recipe/${this.id}`
-			method = "PUT"
+		if (this.props.id) {
+			this.context.saveRecipe(this.props.id, state)
+		} else {
+			this.context.saveRecipe(undefined, state)
 		}
-		fetch(url, {
-			headers: {
-				"Content-Type": "application/json"
-			},
-			method,
-			body: JSON.stringify(state)
-		}).then(response => response.json())
-			.then(data => {
-				console.log(data)
-			})
-			.catch(err => console.log("Unexpected error:", err))
 	}
 }
 

@@ -32,11 +32,11 @@ class Recipe extends PureComponent {
 	}
 
 	edit() {
-		this.context.editRecipe(this)
+		this.context.editRecipe(this.props.id)
 	}
 
 	view() {
-		this.context.viewRecipe(this)
+		this.context.viewRecipe(this.props.id)
 	}
 
 	render() {
