@@ -3,21 +3,18 @@ An Introduction to Databases exercise project with Java Spark and React
 
 ## Structure
 ```
-src
-├───main
-│   ├───java                        // Backend
-│   │   └───net/maunium/recipebook
-│   │       │   RecipeBook.java     // Main
-│   │       ├───api                 // API request handlers
-│   │       ├───model               // Data models
-│   │       └───util                // Utilities
-│   │
-│   └───resources                   // Frontend
-│       ├───webapp                  // Frontend build directory
-│       ├───src                     // JS/CSS
-│       └───public                  // HTML
-|
-└───target                          // Backend build directory
+RecipeBook
+│   recipebook.db // Default location for database
+├───target        // Backend build directory (ignored in Git)
+└───src/main
+    ├───java                  
+    │   └───net/maunium/recipebook // Backend
+    │       │   RecipeBook.java    // Main
+    │       ├───api                // API request handlers
+    │       ├───model              // Data models
+    │       └───util               // Utilities
+    │
+    └───resources                  // Frontend (details in frontend README)
 ```
 
 ## Running
