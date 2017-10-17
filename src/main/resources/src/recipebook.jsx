@@ -18,7 +18,7 @@ import PropTypes from "prop-types"
 import RecipeEditor from "./components/editor/recipe"
 import RecipeList from "./components/recipelist"
 import Recipe from "./components/recipe"
-import BackButton from "./res/back.svg"
+import BackIcon from "./res/back.svg"
 
 const
 	VIEW_RECIPE_LIST = "recipe-list",
@@ -133,7 +133,8 @@ class RecipeBook extends Component {
 		return (
 			<div className="recipebook">
 				<header>
-					<button onClick={this.back} className={`back ${this.canGoBack() ? "" : "hidden"}`}><BackButton/>
+					<button onClick={this.back} className={`back ${this.canGoBack() ? "" : "hidden"}`}>
+						<BackIcon/>
 					</button>
 					<span className="title">RecipeBook</span>
 				</header>
