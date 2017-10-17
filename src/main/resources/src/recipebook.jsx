@@ -13,11 +13,12 @@
 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
-import React, { Component } from "react"
+import React, {Component} from "react"
 import PropTypes from "prop-types"
-import RecipeEditor from './components/editor/recipe'
-import RecipeList from './components/recipelist'
-import Recipe from './components/recipe'
+import RecipeEditor from "./components/editor/recipe"
+import RecipeList from "./components/recipelist"
+import Recipe from "./components/recipe"
+import BackButton from "./res/back.svg"
 
 const
 	VIEW_RECIPE_LIST = "recipe-list",
@@ -30,10 +31,11 @@ class RecipeBook extends Component {
 		ingredients: PropTypes.object,
 		recipes: PropTypes.object,
 		newRecipe: PropTypes.func,
-		listIngredients : PropTypes.func,
+		listIngredients: PropTypes.func,
 		editRecipe: PropTypes.func,
 		viewRecipe: PropTypes.func,
 		saveRecipe: PropTypes.func,
+		back: PropTypes.func,
 	}
 
 	getChildContext() {
@@ -41,10 +43,11 @@ class RecipeBook extends Component {
 			ingredients: this.state.ingredients,
 			recipes: this.state.recipes,
 			newRecipe: this.newRecipe,
-			listIngredients : this.listIngredients ,
+			listIngredients: this.listIngredients,
 			editRecipe: this.editRecipe,
 			viewRecipe: this.viewRecipe,
 			saveRecipe: this.saveRecipe,
+			back: this.back,
 		}
 	}
 
@@ -99,15 +102,43 @@ class RecipeBook extends Component {
 			}, err => console.log("Unexpected error:", err))
 	}
 
+	canGoBack() {
+		return this.state.view !== VIEW_RECIPE_LIST
+	}
+
+	back() {
+		switch(this.state.view) {
+			case VIEW_VIEW_RECIPE:
+				this.setState({
+					view: VIEW_RECIPE_LIST,
+					currentRecipe: {},
+				})
+				return
+			case VIEW_EDIT_RECIPE:
+				if (Object.keys(this.state.currentRecipe).length === 0) {
+					this.setState({view: VIEW_RECIPE_LIST})
+				} else {
+					this.setState({view: VIEW_VIEW_RECIPE})
+				}
+				return
+			case VIEW_INGREDIENT_LIST:
+				this.setState({view: VIEW_RECIPE_LIST})
+				return
+		}
+	}
+
 	render() {
 		return (
 			<div className="recipebook">
-				<header>RecipeBook</header>
+				<header>
+					<button onClick={this.back} className={`back ${this.canGoBack() ? "" : "hidden"}`}><BackButton/></button>
+					<span className="title">RecipeBook</span>
+				</header>
 
-				{ this.state.view === VIEW_RECIPE_LIST ? <RecipeList recipes={this.state.recipes}/> : ""}
-				{ this.state.view === VIEW_EDIT_RECIPE ? <RecipeEditor {...this.state.currentRecipe}/> : ""}
-				{ this.state.view === VIEW_VIEW_RECIPE ? <Recipe {...this.state.currentRecipe}/> : ""}
-				{ this.state.view === VIEW_INGREDIENT_LIST ? <RecipeList/> : ""}
+				{this.state.view === VIEW_RECIPE_LIST ? <RecipeList recipes={this.state.recipes}/> : ""}
+				{this.state.view === VIEW_EDIT_RECIPE ? <RecipeEditor {...this.state.currentRecipe}/> : ""}
+				{this.state.view === VIEW_VIEW_RECIPE ? <Recipe {...this.state.currentRecipe}/> : ""}
+				{this.state.view === VIEW_INGREDIENT_LIST ? <RecipeList/> : ""}
 			</div>
 		)
 	}
@@ -119,7 +150,7 @@ class RecipeBook extends Component {
 		})
 	}
 
-	listIngredients () {
+	listIngredients() {
 		this.setState({view: VIEW_INGREDIENT_LIST})
 	}
 
