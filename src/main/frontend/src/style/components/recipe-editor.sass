@@ -24,7 +24,11 @@
 
 	> .field
 		width: 100%
-		padding-bottom: .5rem
+		box-sizing: border-box
+
+		padding: 0 .5rem .5rem
+		+if-big
+			padding: 0 0 .5rem
 
 		&.author, &.name
 			display: inline-block

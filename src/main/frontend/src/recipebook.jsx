@@ -166,7 +166,6 @@ class RecipeBook extends Component {
 						<span className="subtitle">{this.subtitle()}</span>
 					</span>
 				</header>
-
 				{this.state.view === VIEW_RECIPE_LIST ? <RecipeList recipes={this.state.recipes}/> : ""}
 				{this.state.view === VIEW_EDIT_RECIPE ? <RecipeEditor {...this.state.currentRecipe}/> : ""}
 				{this.state.view === VIEW_VIEW_RECIPE ? <Recipe {...this.state.currentRecipe}/> : ""}

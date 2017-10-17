@@ -17,7 +17,9 @@
 	background-color: $main-color
 	margin: .5rem 0
 	box-sizing: border-box
-	border-radius: .25rem
+
+	+if-big
+		border-radius: .25rem
 
 	&.list-view
 		cursor: pointer

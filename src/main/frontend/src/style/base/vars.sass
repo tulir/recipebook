@@ -20,6 +20,18 @@ $dark-alt-color: darken($alt-color, 10%)
 $text-color: #212121
 $background-color: #FAFAFA
 $inverted-text-color: $background-color
-$width: 40rem
-$header-height: 3rem
+$header-height: var(--header-height)
 $font-stack: "Raleway", "Roboto", sans-serif
+$max-width: 37.5rem
+
+$breakpoint: "screen and (min-width: #{$max-width + 0.0625rem})"
+
+
+=if-big
+	@media #{$breakpoint}
+		@content
+
+@at-root:root
+	--header-height: 4rem
+	+if-big
+		--header-height: 3rem
