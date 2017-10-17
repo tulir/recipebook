@@ -86,21 +86,21 @@ public class RecipeBook {
 				get("/list", Ingredients::list, JSON.transformer());
 				post("/add", Ingredients::add, JSON.transformer());
 				put("/:id", Ingredients::rename, JSON.transformer());
-				delete("/:id", Ingredients::delete);
+				delete("/:id", Ingredients::delete, JSON.transformer());
 			});
 			path("/recipe", () -> {
 				get("/list", Recipes::list, JSON.transformer());
 				post("/add", Recipes::add, JSON.transformer());
 				get("/:id", Recipes::get, JSON.transformer());
 				put("/:id", Recipes::edit, JSON.transformer());
-				delete("/:id", Recipes::delete);
+				delete("/:id", Recipes::delete, JSON.transformer());
 			});
 			path("/cookbook", () -> {
 				get("/list", Cookbooks::list, JSON.transformer());
 				post("/add", Cookbooks::add, JSON.transformer());
 				get("/:id", Cookbooks::get, JSON.transformer());
 				put("/:id", Cookbooks::edit, JSON.transformer());
-				delete("/:id", Cookbooks::delete);
+				delete("/:id", Cookbooks::delete, JSON.transformer());
 			});
 		});
 	}

@@ -79,9 +79,11 @@ public class Ingredient implements ISQLTableClass {
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
 
-			id = rs.getInt("id");
-			String name = rs.getString("name");
-			return new Ingredient(id, name);
+			if (rs.next()) {
+				id = rs.getInt("id");
+				String name = rs.getString("name");
+				return new Ingredient(id, name);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
