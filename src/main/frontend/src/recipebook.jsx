@@ -124,6 +124,7 @@ class RecipeBook extends Component {
 				}
 				return
 			case VIEW_INGREDIENT_LIST:
+			default:
 				this.setState({view: VIEW_RECIPE_LIST})
 				return
 		}
