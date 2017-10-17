@@ -126,7 +126,7 @@ class RecipeEditor extends Component {
 		}
 
 		// Remove ingredient names
-		for (const [index, part] of Object.entries(state.parts)) {
+		for (const part of state.parts) {
 			part.ingredientID = part.ingredient.id
 			delete part.ingredient
 		}
