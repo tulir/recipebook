@@ -20,7 +20,7 @@ RecipeBook
 ## Running
 
 ### Production
-Run `mvn package` to compile and package code into `./target/recipebook-1.0.0.jar`.
+Run `mvn clean compile package` to compile and package everything into `./target/recipebook-<version>-jar-with-dependencies.jar`.
 Then simply run the jar and open the web server at localhost:8080
 
 ### Development
