@@ -21,6 +21,7 @@ button
 	color: $inverted-text-color
 	box-sizing: border-box
 	font-size: 1rem
+	cursor: pointer
 
 	&:hover
 		background-color: $dark-color
@@ -53,6 +54,9 @@ input, textarea
 	&:focus
 		border-bottom: 2px solid $dark-color
 		margin-bottom: 0
+
+	&textarea
+		resize: vertical
 
 =input-margin-bottom($amount)
 	margin-bottom: calc(#{$amount} + 1px)

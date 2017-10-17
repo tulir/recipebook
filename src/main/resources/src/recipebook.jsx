@@ -18,23 +18,32 @@ import PropTypes from "prop-types"
 import Ingredient from './components/ingredient'
 import RecipeEditor from './components/editor/recipe'
 import RecipeList from './components/recipelist'
+import Recipe from './components/recipe'
+
+const
+	VIEW_RECIPE_LIST = "recipe-list",
+	VIEW_EDIT_RECIPE = "recipe-editor",
+	VIEW_VIEW_RECIPE = "recipe-full-view",
+	VIEW_INGREDIENT_LIST = "ingredient-list"
 
 class RecipeBook extends Component {
 	static childContextTypes = {
 		ingredients: PropTypes.object,
 		recipes: PropTypes.array,
-		enterRecipeEditor: PropTypes.func,
-		enterIngredientList: PropTypes.func,
+		newRecipe: PropTypes.func,
+		listIngredients : PropTypes.func,
 		editRecipe: PropTypes.func,
+		viewRecipe: PropTypes.func,
 	}
 
 	getChildContext() {
 		return {
 			ingredients: this.state.ingredients,
 			recipes: this.state.recipes,
-			enterRecipeEditor: this.enterRecipeEditor,
-			enterIngredientList: this.enterIngredientList,
+			newRecipe: this.newRecipe,
+			listIngredients : this.listIngredients ,
 			editRecipe: this.editRecipe,
+			viewRecipe: this.viewRecipe,
 		}
 	}
 
@@ -43,15 +52,19 @@ class RecipeBook extends Component {
 		this.state = {
 			ingredients: new Map(),
 			recipes: [],
-			view: "recipelist",
-			recipeToEdit: {},
+			view: VIEW_RECIPE_LIST,
+			currentRecipe: {},
 		}
 		this.fetchIngredients()
 			.then(() => this.fetchRecipes()
 				.then(this.forceUpdate()))
-		this.enterRecipeEditor = this.enterRecipeEditor.bind(this)
-		this.enterIngredientList = this.enterIngredientList.bind(this)
-		this.editRecipe = this.editRecipe.bind(this)
+
+		// Make sure the context functions are always called with this instance as the function context.
+		for (const [key, func] of Object.entries(this.getChildContext())) {
+			if (typeof(func) === "function") {
+				this[key] = func.bind(this)
+			}
+		}
 	}
 
 	fetchIngredients() {
@@ -85,28 +98,40 @@ class RecipeBook extends Component {
 			<div className="recipebook">
 				<header>RecipeBook</header>
 
-				{ this.state.view === "recipelist" ? <RecipeList recipes={this.state.recipes} enterRecipeEditor={this.enterRecipeEditor} enterIngredientList={this.enterIngredientList}/> : ""}
-				{ this.state.view === "recipeeditor" ? <RecipeEditor {...this.state.recipeToEdit}/> : ""}
-				{ this.state.view === "ingredientlist" ? <RecipeList/> : ""}
+				{ this.state.view === VIEW_RECIPE_LIST ? <RecipeList recipes={this.state.recipes} enterRecipeEditor={this.enterRecipeEditor} enterIngredientList={this.enterIngredientList}/> : ""}
+				{ this.state.view === VIEW_EDIT_RECIPE ? <RecipeEditor {...this.state.currentRecipe}/> : ""}
+				{ this.state.view === VIEW_VIEW_RECIPE ? <Recipe {...this.state.currentRecipe}/> : ""}
+				{ this.state.view === VIEW_INGREDIENT_LIST ? <RecipeList/> : ""}
 			</div>
 		)
 	}
 
-	enterRecipeEditor() {
+	newRecipe() {
 		this.setState({
-			view: "recipeeditor",
-			recipeToEdit: {},
+			view: VIEW_EDIT_RECIPE,
+			currentRecipe: {},
 		})
 	}
 
-	enterIngredientList() {
-		this.setState({view: "ingredientlist"})
+	listIngredients () {
+		this.setState({view: VIEW_INGREDIENT_LIST})
 	}
 
 	editRecipe(recipe) {
+		const props = Object.assign({}, recipe.props)
+		delete props.listView
 		this.setState({
-			view: "recipeeditor",
-			recipeToEdit: recipe.props,
+			view: VIEW_EDIT_RECIPE,
+			currentRecipe: props,
+		})
+	}
+
+	viewRecipe(recipe) {
+		const props = Object.assign({}, recipe.props)
+		delete props.listView
+		this.setState({
+			view: VIEW_VIEW_RECIPE,
+			currentRecipe: props,
 		})
 	}
 }

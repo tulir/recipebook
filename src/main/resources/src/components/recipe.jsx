@@ -21,19 +21,41 @@ import PropTypes from "prop-types"
 class Recipe extends PureComponent {
 	static contextTypes = {
 		editRecipe: PropTypes.func.isRequired,
+		viewRecipe: PropTypes.func.isRequired,
 	}
 
 	constructor(props, context) {
 		super(props, context)
 
 		this.edit = this.edit.bind(this)
+		this.view = this.view.bind(this)
 	}
 
 	edit() {
 		this.context.editRecipe(this)
 	}
 
+	view() {
+		this.context.viewRecipe(this)
+	}
+
 	render() {
+		if (this.props.listView) {
+			return (
+				<div className="recipe list-view" onClick={this.view} key={this.props.name}>
+					<div className="information">
+						<span className="name">
+							{this.props.name}
+						</span> by <span className="author">
+							{this.props.author}
+						</span>
+						<span className="description">
+							{this.props.description}
+						</span>
+					</div>
+				</div>
+			)
+		}
 		return (
 			<div className="recipe" key={this.props.name}>
 				<button onClick={this.edit} className="edit">
@@ -45,6 +67,9 @@ class Recipe extends PureComponent {
 						{this.props.name}
 					</span> by <span className="author">
 						{this.props.author}
+					</span>
+					<span className="description">
+						{this.props.description}
 					</span>
 					<div className="parts">
 						{this.props.parts.map((part, index) => <RecipePart key={index} {...part}/>)}

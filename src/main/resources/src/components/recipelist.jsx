@@ -20,17 +20,17 @@ import PropTypes from "prop-types"
 class RecipeList extends PureComponent {
 	static contextTypes = {
 		enterIngredientList: PropTypes.func.isRequired,
-		enterRecipeEditor: PropTypes.func.isRequired,
+		newRecipe: PropTypes.func.isRequired,
 	}
 
 	render() {
 		return (
 			<div>
 				<div className="recipes recipebook-list">
-					{this.props.recipes.map(recipe => <Recipe key={recipe.name} {...recipe}/>)}
+					{this.props.recipes.map(recipe => <Recipe key={recipe.name} listView={true} {...recipe}/>)}
 				</div>
 				<footer>
-					<button onClick={this.context.enterRecipeEditor}>
+					<button onClick={this.context.newRecipe}>
 						New recipe
 					</button>
 					<button onClick={this.context.enterIngredientList}>

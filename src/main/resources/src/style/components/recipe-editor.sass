@@ -20,10 +20,22 @@
 	position: absolute
 	bottom: 0
 	top: $header-height
+	width: 100%
 
 	> .field
 		width: 100%
 		padding-bottom: .5rem
+
+		&.author, &.name
+			display: inline-block
+			width: 50%
+			box-sizing: border-box
+			&.name
+				padding-right: .25rem
+			&.author
+				padding-left: .25rem
+			input
+				width: 100%
 
 		&.description, &.instructions
 			input, textarea

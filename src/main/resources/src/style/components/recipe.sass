@@ -19,11 +19,20 @@
 	box-sizing: border-box
 	border-radius: .25rem
 
+	&.list-view
+		cursor: pointer
+		&:hover
+			background-color: $dark-color
+
 	.information
 		padding: 1rem
 
 		.name
 			font-weight: bold
+
+		.description
+			display: block
+			margin-top: .5rem
 
 		.parts
 			margin: .5rem 0
