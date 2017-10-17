@@ -107,7 +107,7 @@ class RecipeBook extends Component {
 	}
 
 	back() {
-		switch(this.state.view) {
+		switch (this.state.view) {
 			case VIEW_VIEW_RECIPE:
 				this.setState({
 					view: VIEW_RECIPE_LIST,
@@ -131,7 +131,8 @@ class RecipeBook extends Component {
 		return (
 			<div className="recipebook">
 				<header>
-					<button onClick={this.back} className={`back ${this.canGoBack() ? "" : "hidden"}`}><BackButton/></button>
+					<button onClick={this.back} className={`back ${this.canGoBack() ? "" : "hidden"}`}><BackButton/>
+					</button>
 					<span className="title">RecipeBook</span>
 				</header>
 

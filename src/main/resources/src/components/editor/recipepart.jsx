@@ -13,7 +13,7 @@
 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
-import React, { Component } from "react"
+import React, {Component} from "react"
 import PropTypes from "prop-types"
 
 class PartEditor extends Component {
@@ -26,7 +26,7 @@ class PartEditor extends Component {
 	constructor(props, context) {
 		super(props, context)
 		this.state = Object.assign({
-			ingredient: { id: 1 },
+			ingredient: {id: 1},
 			unit: "",
 			amount: 0,
 			instructions: ""
@@ -53,10 +53,13 @@ class PartEditor extends Component {
 	render() {
 		return (
 			<div className="part-editor">
-				<input className="amount" placeholder="amount" name="amount" type="number" value={this.state.amount} onChange={this.handleInputChange}/>
-				<input className="unit" placeholder="unit" name="unit" value={this.state.unit} onChange={this.handleInputChange}/>
+				<input className="amount" placeholder="amount" name="amount" type="number" value={this.state.amount}
+					   onChange={this.handleInputChange}/>
+				<input className="unit" placeholder="unit" name="unit" value={this.state.unit}
+					   onChange={this.handleInputChange}/>
 				&nbsp;of&nbsp;
-				<select className="ingredient" name="ingredient" value={this.state.ingredient.id} onChange={this.handleInputChange}>
+				<select className="ingredient" name="ingredient" value={this.state.ingredient.id}
+						onChange={this.handleInputChange}>
 					{this.context.ingredients.map(ingredient => (
 						<option key={ingredient.id} value={ingredient.id}>
 							{ingredient.name}
@@ -64,7 +67,8 @@ class PartEditor extends Component {
 					))}
 				</select>
 				<br/>
-				<textarea rows="3" className="instructions" placeholder="Additional instructions..." name="instructions" value={this.state.instructions} onChange={this.handleInputChange}/>
+				<textarea rows="3" className="instructions" placeholder="Additional instructions..." name="instructions"
+						  value={this.state.instructions} onChange={this.handleInputChange}/>
 
 				<div className="buttons">
 					<button type="button" className="delete" onClick={this.delete}>Delete</button>
