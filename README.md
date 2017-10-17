@@ -21,7 +21,7 @@ RecipeBook
 
 ### Production
 Run `mvn clean compile package` to compile and package everything into `./target/recipebook-<version>-jar-with-dependencies.jar`.
-Then simply run the jar and open the web server at localhost:8080
+Then, simply run the jar and open the web server at [localhost:29314](http://localhost:29314). You can change the IP and port by providing them as command-line arguments (IP first, then port).
 
 ### Development
 Install backend dependencies with Maven, then start the server with your IDE.
@@ -33,5 +33,5 @@ in `src/main/resources` and connect to the server provided by the start script
 
 If you're only developing the backend, just compile the frontend
 using `npm run build` and connect to the server provided by the backend
-(probably [localhost:8080](http://localhost:8080))
+(probably [localhost:29314](http://localhost:29314))
 
