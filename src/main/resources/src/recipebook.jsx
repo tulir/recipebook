@@ -35,6 +35,7 @@ class RecipeBook extends Component {
 		editRecipe: PropTypes.func,
 		viewRecipe: PropTypes.func,
 		saveRecipe: PropTypes.func,
+		deleteRecipe: PropTypes.func,
 		back: PropTypes.func,
 	}
 
@@ -47,6 +48,7 @@ class RecipeBook extends Component {
 			editRecipe: this.editRecipe,
 			viewRecipe: this.viewRecipe,
 			saveRecipe: this.saveRecipe,
+			deleteRecipe: this.deleteRecipe,
 			back: this.back,
 		}
 	}
@@ -171,8 +173,17 @@ class RecipeBook extends Component {
 		})
 	}
 
+	deleteRecipe(recipeID) {
+		fetch(`api/recipe/${recipeID}`, {
+			method: "DELETE"
+		}).then(() => {
+			const recipes = this.state.recipes
+			recipes.delete(recipeID)
+			this.setState({recipes, view: VIEW_RECIPE_LIST})
+		}).catch(err => console.log("Unexpected error:", err))
+	}
+
 	saveRecipe(recipeID, newData) {
-		console.log(recipeID, newData)
 		let url = "api/recipe/add", method = "POST"
 		if (recipeID) {
 			url = `api/recipe/${recipeID}`

@@ -16,12 +16,14 @@
 import React, {PureComponent} from "react"
 import RecipePart from "./recipepart"
 import EditIcon from "../res/edit.svg"
+import DeleteIcon from "../res/delete.svg"
 import PropTypes from "prop-types"
 
 class Recipe extends PureComponent {
 	static contextTypes = {
 		editRecipe: PropTypes.func.isRequired,
 		viewRecipe: PropTypes.func.isRequired,
+		deleteRecipe: PropTypes.func.isRequired,
 	}
 
 	constructor(props, context) {
@@ -29,6 +31,7 @@ class Recipe extends PureComponent {
 
 		this.edit = this.edit.bind(this)
 		this.view = this.view.bind(this)
+		this.delete = this.delete.bind(this)
 	}
 
 	edit() {
@@ -37,6 +40,13 @@ class Recipe extends PureComponent {
 
 	view() {
 		this.context.viewRecipe(this.props.id)
+	}
+
+	delete() {
+		const confirmation = window.confirm("Are you sure you want to delete this recipe?")
+		if (confirmation) {
+			this.context.deleteRecipe(this.props.id)
+		}
 	}
 
 	render() {
@@ -58,9 +68,14 @@ class Recipe extends PureComponent {
 		}
 		return (
 			<div className="recipe" key={this.props.name}>
-				<button onClick={this.edit} className="edit">
-					<EditIcon/>
-				</button>
+				<div className="buttons">
+					<button onClick={this.edit} className="edit">
+						<EditIcon/>
+					</button>
+					<button onClick={this.delete} className="delete">
+						<DeleteIcon/>
+					</button>
+				</div>
 
 				<div className="information">
 					<span className="name">
