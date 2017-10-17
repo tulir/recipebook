@@ -135,6 +135,25 @@ class RecipeBook extends Component {
 		}
 	}
 
+	subtitle() {
+		switch(this.state.view) {
+			case VIEW_VIEW_RECIPE:
+				return this.state.currentRecipe.name || ""
+			case VIEW_EDIT_RECIPE:
+				if (this.state.currentRecipe.name) {
+					return `Editing ${this.state.currentRecipe.name}`
+				} else {
+					return "Creating Recipe"
+				}
+			case VIEW_INGREDIENT_LIST:
+				return "Ingredients"
+			case VIEW_RECIPE_LIST:
+				return "Recipes"
+			default:
+				return ""
+		}
+	}
+
 	render() {
 		return (
 			<div className="recipebook">
@@ -142,7 +161,10 @@ class RecipeBook extends Component {
 					<button onClick={this.back} className={`back ${this.canGoBack() ? "" : "hidden"}`}>
 						<BackIcon/>
 					</button>
-					<span className="title">RecipeBook</span>
+					<span className="title">
+						RecipeBook
+						<span className="subtitle">{this.subtitle()}</span>
+					</span>
 				</header>
 
 				{this.state.view === VIEW_RECIPE_LIST ? <RecipeList recipes={this.state.recipes}/> : ""}
