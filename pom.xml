@@ -49,6 +49,12 @@
 			<email>eaglekjohn@gmail.com</email>
 			<timezone>Europe/Helsinki</timezone>
 		</developer>
+		<developer>
+			<id>makmark</id>
+			<name>Mark Mäkelä</name>
+			<email>mark.makela@helsinki.fi</email>
+			<timezone>Europe/Helsinki</timezone>
+		</developer>
 	</developers>
 
 	<properties>
