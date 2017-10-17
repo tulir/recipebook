@@ -34,7 +34,7 @@ class RecipeList extends PureComponent {
 						New recipe
 					</button>
 					<button onClick={this.context.listIngredients}>
-						View known ingredients
+						View ingredients
 					</button>
 				</footer>
 			</div>

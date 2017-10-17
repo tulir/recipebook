@@ -13,12 +13,41 @@
 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
-@import base/vars
-@import base/elements
-@import base/body
+.ingredients
+	.ingredient
+		display: flex
+		border-radius: .25rem
+		background-color: $main-color
+		box-sizing: border-box
+		padding: .25rem .5rem
+		width: 100%
+		margin-top: .25rem
+		justify-content: space-between
 
-@import components/recipebook
-@import components/recipe
-@import components/recipe-editor
-@import components/recipepart-editor
-@import components/ingredients
+		> .info
+			align-self: center
+			flex: 1
+			display: flex
+
+			> .name
+				align-self: center
+				flex: 1
+				font-weight: bold
+				input
+					width: 100%
+
+			> .id
+				align-self: center
+				&:before
+					content: "Ingredient #"
+				&:after
+					content: ": "
+
+		> .buttons
+			display: inline-block
+			font-size: 0
+
+			> button
+				width: 1.5rem
+				height: 1.5rem
+				padding: 0

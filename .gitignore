@@ -1,5 +1,5 @@
 target/
-recipebook.db
+*.db
 
 .idea/dictionaries/
 .idea/workspace.xml

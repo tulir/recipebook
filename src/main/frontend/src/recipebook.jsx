@@ -18,6 +18,7 @@ import PropTypes from "prop-types"
 import RecipeEditor from "./components/editor/recipe"
 import RecipeList from "./components/recipelist"
 import Recipe from "./components/recipe"
+import IngredientList from "./components/ingredientlist"
 import BackIcon from "./res/back.svg"
 
 const
@@ -31,11 +32,13 @@ class RecipeBook extends Component {
 		ingredients: PropTypes.object,
 		recipes: PropTypes.object,
 		newRecipe: PropTypes.func,
-		listIngredients: PropTypes.func,
 		editRecipe: PropTypes.func,
 		viewRecipe: PropTypes.func,
 		saveRecipe: PropTypes.func,
 		deleteRecipe: PropTypes.func,
+		listIngredients: PropTypes.func,
+		saveIngredient: PropTypes.func,
+		deleteIngredient: PropTypes.func,
 		back: PropTypes.func,
 	}
 
@@ -44,11 +47,13 @@ class RecipeBook extends Component {
 			ingredients: this.state.ingredients,
 			recipes: this.state.recipes,
 			newRecipe: this.newRecipe,
-			listIngredients: this.listIngredients,
 			editRecipe: this.editRecipe,
 			viewRecipe: this.viewRecipe,
 			saveRecipe: this.saveRecipe,
 			deleteRecipe: this.deleteRecipe,
+			listIngredients: this.listIngredients,
+			saveIngredient: this.saveIngredient,
+			deleteIngredient: this.deleteIngredient,
 			back: this.back,
 		}
 	}
@@ -143,7 +148,7 @@ class RecipeBook extends Component {
 				{this.state.view === VIEW_RECIPE_LIST ? <RecipeList recipes={this.state.recipes}/> : ""}
 				{this.state.view === VIEW_EDIT_RECIPE ? <RecipeEditor {...this.state.currentRecipe}/> : ""}
 				{this.state.view === VIEW_VIEW_RECIPE ? <Recipe {...this.state.currentRecipe}/> : ""}
-				{this.state.view === VIEW_INGREDIENT_LIST ? <RecipeList/> : ""}
+				{this.state.view === VIEW_INGREDIENT_LIST ? <IngredientList ingredients={this.state.ingredients}/> : ""}
 			</div>
 		)
 	}
@@ -157,6 +162,37 @@ class RecipeBook extends Component {
 
 	listIngredients() {
 		this.setState({view: VIEW_INGREDIENT_LIST})
+	}
+
+	saveIngredient(ingredientID, newData) {
+		let url = "api/ingredient/add", method = "POST"
+		if (ingredientID) {
+			url = `api/ingredient/${ingredientID}`
+			method = "PUT"
+		}
+		return fetch(url, {
+			headers: {
+				"Content-Type": "application/json"
+			},
+			method,
+			body: JSON.stringify(newData)
+		}).then(response => response.json())
+			.then(data => {
+				const ingredients = this.state.ingredients
+				ingredients.set(data.id, data)
+				this.setState({ingredients})
+			})
+			.catch(err => console.log("Unexpected error:", err))
+	}
+
+	deleteIngredient(ingredientID) {
+		return fetch(`api/ingredient/${ingredientID}`, {
+			method: "DELETE"
+		}).then(() => {
+			const ingredients = this.state.ingredients
+			ingredients.delete(ingredientID)
+			this.setState({ingredients})
+		}).catch(err => console.log("Unexpected error:", err))
 	}
 
 	editRecipe(recipeID) {
@@ -176,7 +212,7 @@ class RecipeBook extends Component {
 	}
 
 	deleteRecipe(recipeID) {
-		fetch(`api/recipe/${recipeID}`, {
+		return fetch(`api/recipe/${recipeID}`, {
 			method: "DELETE"
 		}).then(() => {
 			const recipes = this.state.recipes
@@ -191,7 +227,7 @@ class RecipeBook extends Component {
 			url = `api/recipe/${recipeID}`
 			method = "PUT"
 		}
-		fetch(url, {
+		return fetch(url, {
 			headers: {
 				"Content-Type": "application/json"
 			},
