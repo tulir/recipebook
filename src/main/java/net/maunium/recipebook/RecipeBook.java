@@ -42,7 +42,7 @@ public class RecipeBook {
 	/**
 	 * Create and initialize the RecipeBook.
 	 */
-	public RecipeBook() {
+	public RecipeBook(String ip, int port) {
 		db = null;
 		try {
 			db = DriverManager.getConnection("jdbc:sqlite:recipebook.db");
@@ -68,12 +68,13 @@ public class RecipeBook {
 		CookbookEntry.db = db;
 
 		// Set up Spark.
-		port(8080);
+		ipAddress(ip);
+		port(port);
 		staticFileLocation("/webapp");
 		setupSparkRoutes();
 
 		// All done.
-		System.out.println("Running at http://localhost:8080");
+		System.out.printf("Running at http://%s:%d\n", ip, port);
 	}
 
 	/**
@@ -147,9 +148,17 @@ public class RecipeBook {
 	}
 
 	/**
-	 * Main function. Calls {@link RecipeBook#RecipeBook()}
+	 * Main function. Calls {@link RecipeBook#RecipeBook(String, int)}
 	 */
 	public static void main(String[] args) {
-		new RecipeBook();
+		String ip = "localhost";
+		int port = 29314;
+		if (args.length > 0) {
+			ip = args[0];
+			if (args.length > 1) {
+				port = Integer.parseInt(args[1]);
+			}
+		}
+		new RecipeBook(ip, port);
 	}
 }

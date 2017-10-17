@@ -96,7 +96,7 @@
       "target": {
         "host": "localhost",
         "protocol": "http:",
-        "port": 8080
+        "port": 29314
       },
       "changeOrigin": true,
       "secure": false
