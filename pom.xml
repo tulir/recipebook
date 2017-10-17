@@ -84,7 +84,7 @@
 	<build>
 		<resources>
 			<resource>
-				<directory>${basedir}/src/main/resources</directory>
+				<directory>src/main/frontend</directory>
 				<includes>
 					<include>webapp/**</include>
 				</includes>
@@ -97,7 +97,7 @@
 				<version>1.6</version>
 
 				<configuration>
-					<workingDirectory>src/main/resources</workingDirectory>
+					<workingDirectory>src/main/frontend</workingDirectory>
 				</configuration>
 
 				<executions>

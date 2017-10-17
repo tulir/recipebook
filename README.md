@@ -14,13 +14,13 @@ RecipeBook
     │       ├───model              // Data models
     │       └───util               // Utilities
     │
-    └───resources                  // Frontend (details in frontend README)
+    └───frontend                   // Frontend (details in frontend README)
 ```
 
 ## Running
 
 ### Production
-Run `mvn package` to compile and package code into `./target/recipebook-1.0.jar`.
+Run `mvn package` to compile and package code into `./target/recipebook-1.0.0.jar`.
 Then simply run the jar and open the web server at localhost:8080
 
 ### Development
