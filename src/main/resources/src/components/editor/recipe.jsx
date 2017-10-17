@@ -88,7 +88,7 @@ class RecipeEditor extends Component {
 	addPart() {
 		const blankPart = {
 			// Preset the ingredient data so that we can expect it to always exist.
-			ingredient: { props: { id: 1 } }
+			ingredient: {props: {id: 1}}
 		}
 		this.setState({
 			parts: this.state.parts.concat([blankPart])
@@ -111,8 +111,32 @@ class RecipeEditor extends Component {
 	}
 
 	save(event) {
-		event.stopPropagation()
-		// TODO implement saving
+		event.preventDefault()
+		alert("Saving is not fully implemented and completely broken")
+		
+		const state = Object.assign({}, this.state)
+		// De-componentify ingredients
+		for (const part of state.parts) {
+			part.ingredientID = part.ingredient.props.id
+			delete part.ingredient
+		}
+
+		let url = "api/recipe/add", method = "POST"
+		if (this.id) {
+			url = `api/recipe/${this.id}`
+			method = "PUT"
+		}
+		fetch(url, {
+			headers: {
+				"Content-Type": "application/json"
+			},
+			method,
+			body: JSON.stringify(state)
+		}).then(response => response.json())
+			.then(data => {
+				console.log(data)
+			})
+			.catch(err => console.log("Unexpected error:", err))
 	}
 }
 

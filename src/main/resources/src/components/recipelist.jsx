@@ -27,7 +27,7 @@ class RecipeList extends PureComponent {
 		return (
 			<div>
 				<div className="recipes recipebook-list">
-					{this.props.recipes.map(recipe => <Recipe key={recipe.name} listView={true} {...recipe}/>)}
+					{this.props.recipes.map(recipe => <Recipe key={recipe.id} listView={true} {...recipe}/>)}
 				</div>
 				<footer>
 					<button onClick={this.context.newRecipe}>
