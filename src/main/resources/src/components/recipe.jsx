@@ -1,5 +1,4 @@
 import React, { PureComponent } from "react"
-import "./recipe.sass"
 import RecipePart from "./recipepart"
 import EditIcon from "../res/edit.svg"
 import PropTypes from "prop-types"

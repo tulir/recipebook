@@ -1,6 +1,5 @@
 import React, {Component} from "react"
-import PartEditor from "./parteditor"
-import "./recipeeditor.sass"
+import PartEditor from "./recipepart"
 import PropTypes from "prop-types"
 
 class RecipeEditor extends Component {
@@ -37,19 +36,19 @@ class RecipeEditor extends Component {
 	render() {
 		return (
 			<form action="#" className="recipe-editor" onSubmit={this.save}>
-				<div className="field">
+				<div className="name field">
 					<label htmlFor="name">Name</label>
 					<input name="name" value={this.state.name} onChange={this.handleInputChange}/>
 				</div>
-				<div className="field">
+				<div className="author field">
 					<label htmlFor="author">Author</label>
 					<input name="author" value={this.state.author} onChange={this.handleInputChange}/>
 				</div>
-				<div className="field">
+				<div className="description field">
 					<label htmlFor="description">Description</label>
 					<input name="description" value={this.state.description} onChange={this.handleInputChange}/>
 				</div>
-				<div className="field">
+				<div className="instructions field">
 					<label htmlFor="instructions">Instructions</label>
 					<textarea rows="8" name="instructions" value={this.state.instructions}
 							  onChange={this.handleInputChange}/>
@@ -59,23 +58,22 @@ class RecipeEditor extends Component {
 					{this.state.parts.map((part, index) => <PartEditor key={index} {...part}/>)}
 				</div>
 
-				<button type="button" className="add-part" onClick={this.addPart}>
-					Add
-				</button>
-				<button type="submit">
-					Save
-				</button>
+				<div className="buttons">
+					<button type="button" className="add-part" onClick={this.addPart}>
+						New Ingredient
+					</button>
+					<button type="submit">
+						Save Recipe
+					</button>
+				</div>
 			</form>
 		)
 	}
 
 	addPart() {
 		const blankPart = {
-			ingredient: {
-				props: {
-					id: 1
-				}
-			}
+			// Preset the ingredient data so that we can expect it to always exist.
+			ingredient: { props: { id: 1 } }
 		}
 		this.setState({
 			parts: this.state.parts.concat([blankPart])

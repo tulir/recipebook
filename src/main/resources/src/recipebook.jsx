@@ -1,9 +1,8 @@
 import React, { Component } from "react"
 import PropTypes from "prop-types"
 import Ingredient from './components/ingredient'
-import RecipeEditor from './components/recipeeditor'
+import RecipeEditor from './components/editor/recipe'
 import RecipeList from './components/recipelist'
-import './recipebook.sass'
 
 class RecipeBook extends Component {
 	static childContextTypes = {

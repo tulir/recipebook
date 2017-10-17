@@ -1,6 +1,5 @@
 import React, { Component } from "react"
 import PropTypes from "prop-types"
-import "./parteditor.sass"
 
 class PartEditor extends Component {
 	static contextTypes = {
@@ -55,8 +54,10 @@ class PartEditor extends Component {
 				<br/>
 				<textarea rows="3" className="instructions" placeholder="Additional instructions..." name="instructions" value={this.state.instructions} onChange={this.handleInputChange}/>
 
-				<button type="button" className="delete" onClick={this.delete}>Delete</button>
-				<button type="button" className="duplicate">Duplicate</button>
+				<div className="buttons">
+					<button type="button" className="delete" onClick={this.delete}>Delete</button>
+					<button type="button" className="duplicate">Duplicate</button>
+				</div>
 			</div>
 		)
 	}

@@ -1,5 +1,3 @@
-@import ../vars
-
 .part-editor
 	background-color: darken($background-color, 10%)
 	border-radius: .25rem
@@ -10,13 +8,22 @@
 	width: calc(50% - 1rem)
 	display: inline-block
 
-	.amount
+	input, textarea, select
+		color: $text-color
+
+	> .amount
 		width: 3rem
-	.unit
+	> .unit
 		width: 2.5rem
-	.instructions
+	> .instructions
 		width: 100%
 		resize: vertical
+		+input-margin-bottom(.25rem)
+		margin-top: .25rem
 
-	button
-		width: 50%
+	> .buttons
+		+button-group
+
+		button
+			padding: .2rem
+			width: 50%
