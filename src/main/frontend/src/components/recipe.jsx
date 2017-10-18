@@ -67,7 +67,7 @@ class Recipe extends PureComponent {
 			)
 		}
 		return (
-			<div className="recipe" key={this.props.name}>
+			<div className="recipe standalone" key={this.props.name}>
 				<div className="buttons">
 					<button onClick={this.edit} className="edit">
 						<EditIcon/>

@@ -26,7 +26,7 @@ class RecipeList extends PureComponent {
 	render() {
 		return (
 			<div>
-				<div className="recipes recipebook-list">
+				<div className="recipes recipebook-scrollable">
 					{this.props.recipes.map(recipe => <Recipe key={recipe.id} listView={true} {...recipe}/>)}
 				</div>
 				<footer>

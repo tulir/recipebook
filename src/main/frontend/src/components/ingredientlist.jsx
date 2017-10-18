@@ -47,7 +47,7 @@ class IngredientList extends Component {
 	render() {
 		return (
 			<div>
-				<div className="ingredients recipebook-list">
+				<div className="ingredients recipebook-scrollable">
 					{this.props.ingredients.map(ingredient => <Ingredient key={ingredient.id} listView={true} {...ingredient}/>)}
 					{this.state.addingIngredient ? <Ingredient listView={true} id="n" editing={true}/> : ""}
 				</div>

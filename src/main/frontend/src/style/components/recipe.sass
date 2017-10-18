@@ -21,6 +21,10 @@
 	+if-big
 		border-radius: .25rem
 
+	&.standalone
+		overflow-y: auto
+		max-height: calc(100% - #{$header-height})
+
 	&.list-view
 		cursor: pointer
 		&:hover
