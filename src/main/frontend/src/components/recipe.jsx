@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import React, {PureComponent} from "react"
+import ReactMarkdown from "react-markdown"
 import RecipePart from "./recipepart"
 import EditIcon from "../res/edit.svg"
 import DeleteIcon from "../res/delete.svg"
@@ -89,7 +90,9 @@ class Recipe extends PureComponent {
 					<div className="parts">
 						{this.props.parts.map((part, index) => <RecipePart key={index} {...part}/>)}
 					</div>
-					<span className="instructions">{this.props.instructions}</span>
+					<span className="instructions">
+						<ReactMarkdown source={this.props.instructions}/>
+					</span>
 				</div>
 			</div>
 		)

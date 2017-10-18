@@ -127,7 +127,7 @@ public class RecipeBook {
 				"ingredient   INTEGER      NOT NULL," +
 				"recipe       INTEGER      NOT NULL," +
 				"`order`      INTEGER      NOT NULL," +
-				"amount       INTEGER      NOT NULL," +
+				"amount       REAL        NOT NULL," +
 				"unit         VARCHAR(5)   NOT NULL," +
 				"instructions VARCHAR(255)," +
 				"FOREIGN KEY (ingredient) REFERENCES Ingredient(id)," +
