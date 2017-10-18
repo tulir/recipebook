@@ -57,7 +57,7 @@ class RecipeBook extends Component {
 			listIngredients: () => window.location.hash = "#/ingredients",
 			saveIngredient: this.saveIngredient.bind(this),
 			deleteIngredient: this.deleteIngredient.bind(this),
-			back: () => window.history.back(), //this.back,
+			back: () => window.history.back(),
 		}
 	}
 
@@ -77,8 +77,6 @@ class RecipeBook extends Component {
 		this.router.handle("/recipe/{id:[0-9]+}", ({id}) => this.viewRecipe(+id))
 		this.router.handle("/recipe/{id:[0-9]+}/edit", ({id}) => this.editRecipe(+id))
 		this.router.handle("/recipe/new", () => this.newRecipe())
-
-		//this.back = this.back.bind(this)
 	}
 
 	componentDidMount() {
@@ -123,28 +121,6 @@ class RecipeBook extends Component {
 		return this.state.view !== VIEW_RECIPE_LIST
 	}
 
-	/*back() {
-		switch (this.state.view) {
-			case VIEW_VIEW_RECIPE:
-				this.setState({
-					view: VIEW_RECIPE_LIST,
-					currentRecipe: {},
-				})
-				return
-			case VIEW_EDIT_RECIPE:
-				if (Object.keys(this.state.currentRecipe).length === 0) {
-					this.setState({view: VIEW_RECIPE_LIST})
-				} else {
-					this.setState({view: VIEW_VIEW_RECIPE})
-				}
-				return
-			case VIEW_INGREDIENT_LIST:
-			default:
-				this.setState({view: VIEW_RECIPE_LIST})
-				return
-		}
-	}*/
-
 	subtitle() {
 		switch(this.state.view) {
 			case VIEW_VIEW_RECIPE:
@@ -183,7 +159,7 @@ class RecipeBook extends Component {
 		return (
 			<div className="recipebook">
 				<header>
-					<button onClick={() => window.history.back()} className={"back"/*`back ${this.canGoBack() ? "" : "hidden"}`*/}>
+					<button onClick={() => window.history.back()} className="back">
 						<BackIcon/>
 					</button>
 					<span className="title">
