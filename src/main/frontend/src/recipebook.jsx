@@ -15,6 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import React, {Component} from "react"
 import PropTypes from "prop-types"
+import {Hashmux} from "hashmux"
 import RecipeEditor from "./components/editor/recipe"
 import RecipeList from "./components/recipelist"
 import Recipe from "./components/recipe"
@@ -31,6 +32,7 @@ class RecipeBook extends Component {
 	static childContextTypes = {
 		ingredients: PropTypes.object,
 		recipes: PropTypes.object,
+		listRecipes: PropTypes.func,
 		newRecipe: PropTypes.func,
 		editRecipe: PropTypes.func,
 		viewRecipe: PropTypes.func,
@@ -46,15 +48,16 @@ class RecipeBook extends Component {
 		return {
 			ingredients: this.state.ingredients,
 			recipes: this.state.recipes,
-			newRecipe: this.newRecipe,
-			editRecipe: this.editRecipe,
-			viewRecipe: this.viewRecipe,
-			saveRecipe: this.saveRecipe,
-			deleteRecipe: this.deleteRecipe,
-			listIngredients: this.listIngredients,
-			saveIngredient: this.saveIngredient,
-			deleteIngredient: this.deleteIngredient,
-			back: this.back,
+			listRecipes: () => window.location.hash = "#/",
+			newRecipe: (id) => window.location.hash = `#/recipe/new`,
+			editRecipe: (id) => window.location.hash = `#/recipe/${id}/edit`,
+			viewRecipe: (id) => window.location.hash = `#/recipe/${id}`,
+			saveRecipe: this.saveRecipe.bind(this),
+			deleteRecipe: this.deleteRecipe.bind(this),
+			listIngredients: () => window.location.hash = "#/ingredients",
+			saveIngredient: this.saveIngredient.bind(this),
+			deleteIngredient: this.deleteIngredient.bind(this),
+			back: () => window.history.back(),
 		}
 	}
 
@@ -66,15 +69,20 @@ class RecipeBook extends Component {
 			view: VIEW_RECIPE_LIST,
 			currentRecipe: {},
 		}
-		this.fetchIngredients()
-			.then(() => this.fetchRecipes())
+		window.app = this
 
-		// Make sure the context functions are always called with this instance as the function context.
-		for (const [key, func] of Object.entries(this.getChildContext())) {
-			if (typeof(func) === "function") {
-				this[key] = func.bind(this)
-			}
-		}
+		this.router = new Hashmux()
+		this.router.handle("/", () => this.listRecipes())
+		this.router.handle("/ingredients", () => this.listIngredients())
+		this.router.handle("/recipe/{id:[0-9]+}", ({id}) => this.viewRecipe(+id))
+		this.router.handle("/recipe/{id:[0-9]+}/edit", ({id}) => this.editRecipe(+id))
+		this.router.handle("/recipe/new", () => this.newRecipe())
+	}
+
+	componentDidMount() {
+		this.fetchIngredients()
+			.then(() => this.fetchRecipes()
+				.then(() => this.router.listen()))
 	}
 
 	fetchIngredients() {
@@ -120,32 +128,10 @@ class RecipeBook extends Component {
 		return this.state.view !== VIEW_RECIPE_LIST
 	}
 
-	back() {
-		switch (this.state.view) {
-			case VIEW_VIEW_RECIPE:
-				this.setState({
-					view: VIEW_RECIPE_LIST,
-					currentRecipe: {},
-				})
-				return
-			case VIEW_EDIT_RECIPE:
-				if (Object.keys(this.state.currentRecipe).length === 0) {
-					this.setState({view: VIEW_RECIPE_LIST})
-				} else {
-					this.setState({view: VIEW_VIEW_RECIPE})
-				}
-				return
-			case VIEW_INGREDIENT_LIST:
-			default:
-				this.setState({view: VIEW_RECIPE_LIST})
-				return
-		}
-	}
-
 	subtitle() {
 		switch(this.state.view) {
 			case VIEW_VIEW_RECIPE:
-				return this.state.currentRecipe.name || ""
+				return this.state.currentRecipe ? this.state.currentRecipe.name : ""
 			case VIEW_EDIT_RECIPE:
 				if (this.state.currentRecipe.name) {
 					return `Editing ${this.state.currentRecipe.name}`
@@ -161,11 +147,26 @@ class RecipeBook extends Component {
 		}
 	}
 
+	/**
+	 * Delete the latest history entry and go to the same URL.
+	 *
+	 * This is useful when we're assuming that the previous page
+	 * is the page we want to go to, but we also want to make sure
+	 * that the user goes where he intended to go.
+	 *
+	 * If the previous page is the same as the URL given, the
+	 * window.location.hash assignment does nothing.
+	 */
+	goBackTo(url) {
+		window.history.back()
+		window.location.hash = url
+	}
+
 	render() {
 		return (
 			<div className="recipebook">
 				<header>
-					<button onClick={this.back} className={`back ${this.canGoBack() ? "" : "hidden"}`}>
+					<button onClick={() => window.history.back()} className="back">
 						<BackIcon/>
 					</button>
 					<span className="title">
@@ -186,6 +187,10 @@ class RecipeBook extends Component {
 			view: VIEW_EDIT_RECIPE,
 			currentRecipe: {},
 		})
+	}
+
+	listRecipes() {
+		this.setState({view: VIEW_RECIPE_LIST})
 	}
 
 	listIngredients() {
@@ -226,18 +231,22 @@ class RecipeBook extends Component {
 
 	editRecipe(recipeID) {
 		const recipe = this.state.recipes.get(recipeID)
-		this.setState({
-			view: VIEW_EDIT_RECIPE,
-			currentRecipe: recipe,
-		})
+		if (recipe) {
+			this.setState({
+				view: VIEW_EDIT_RECIPE,
+				currentRecipe: recipe,
+			})
+		}
 	}
 
 	viewRecipe(recipeID) {
 		const recipe = this.state.recipes.get(recipeID)
-		this.setState({
-			view: VIEW_VIEW_RECIPE,
-			currentRecipe: recipe,
-		})
+		if (recipe) {
+			this.setState({
+				view: VIEW_VIEW_RECIPE,
+				currentRecipe: recipe,
+			})
+		}
 	}
 
 	deleteRecipe(recipeID) {
@@ -246,7 +255,8 @@ class RecipeBook extends Component {
 		}).then(() => {
 			const recipes = this.state.recipes
 			recipes.delete(recipeID)
-			this.setState({recipes, view: VIEW_RECIPE_LIST})
+			this.goBackTo(`#/`)
+			this.setState({recipes})
 		}).catch(err => console.log("Unexpected error:", err))
 	}
 
@@ -269,7 +279,7 @@ class RecipeBook extends Component {
 				recipes.set(data.id, data)
 
 				this.setState({recipes})
-				this.viewRecipe(data.id)
+				this.goBackTo(`#/recipe/${data.id}`)
 				return data
 			})
 			.catch(err => console.log("Unexpected error:", err))
