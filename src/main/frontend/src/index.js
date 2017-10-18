@@ -9,5 +9,15 @@ Map.prototype.map = function (...args) {
 	return [...this.values()].map(...args)
 }
 
+// eslint-disable-next-line
+Map.prototype.find = function(callback) {
+	for (const [key, value] of this) {
+		if (callback(value)) {
+			return key
+		}
+	}
+	return undefined
+}
+
 // Render app
 ReactDOM.render(<RecipeBook/>, document.getElementById('root'))
