@@ -114,13 +114,9 @@ class RecipeEditor extends Component {
 	}
 
 	addPart() {
-		const blankPart = {
-			// Preset the ingredient data so that we can expect it to always exist.
-			ingredientName: ""
-		}
-		this.setState({
-			parts: this.state.parts.concat([blankPart])
-		})
+		const parts = this.state.parts
+		parts.push({})
+		this.setState({parts})
 	}
 
 	deletePart(index) {
@@ -163,7 +159,7 @@ class RecipeEditor extends Component {
 					// Send ingredient creation request
 					this.context.saveIngredient(undefined, {
 						name: part.ingredientName.trim(),
-					}).then(data => 
+					}).then(data =>
 						// Once it finishes, store the ID of the newly created ingredient in the RecipePart.
 						part.ingredientID = data.id)
 				)
