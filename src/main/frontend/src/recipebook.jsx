@@ -92,7 +92,14 @@ class RecipeBook extends Component {
 	processRecipeFromServer(recipe) {
 		for (const part of recipe.parts) {
 			const ingredient = this.state.ingredients.get(part.ingredientID)
-			part.ingredient = ingredient
+			if (!ingredient) {
+				part.ingredient = {
+					name: "Unknown/Deleted Ingredient",
+					id: -1,
+				}
+			} else {
+				part.ingredient = ingredient
+			}
 			delete part.ingredientID
 		}
 	}
