@@ -55,7 +55,7 @@ class PartEditor extends Component {
 	render() {
 		return (
 			<div className="part-editor">
-				<input className="amount" placeholder="amount" name="amount" type="number" value={this.state.amount}
+				<input className="amount" placeholder="amount" name="amount" type="number" step="any" value={this.state.amount}
 					   onChange={this.handleInputChange}/>
 				<input className="unit" placeholder="unit" name="unit" value={this.state.unit}
 					   onChange={this.handleInputChange}/>

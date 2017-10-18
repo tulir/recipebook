@@ -48,7 +48,7 @@ public class RecipePart {
 	/**
 	 * The amount needed of this ingredient.
 	 */
-	public int amount;
+	public double amount;
 	/**
 	 * The unit of the amount field above.
 	 */
@@ -61,7 +61,7 @@ public class RecipePart {
 	/**
 	 * Initialize a RecipePart with the given data.
 	 */
-	public RecipePart(Recipe recipe, int ingredientID, int amount, String unit, String instructions) {
+	public RecipePart(Recipe recipe, int ingredientID, double amount, String unit, String instructions) {
 		this.recipe = recipe;
 		this.ingredientID = ingredientID;
 		this.amount = amount;
@@ -102,7 +102,7 @@ public class RecipePart {
 				stmt.setInt(1, part.ingredientID);
 				stmt.setInt(2, recipe.id);
 				stmt.setInt(3, i);
-				stmt.setInt(4, part.amount);
+				stmt.setDouble(4, part.amount);
 				stmt.setString(5, part.unit);
 				stmt.setString(6, part.instructions);
 				stmt.addBatch();
@@ -124,7 +124,7 @@ public class RecipePart {
 	 */
 	public static RecipePart read(ResultSet rs, Recipe recipe) throws SQLException {
 		int ingredientID = rs.getInt("ingredient");
-		int amount = rs.getInt("amount");
+		double amount = rs.getInt("amount");
 		String unit = rs.getString("unit");
 		String instructions = rs.getString("instructions");
 		return new RecipePart(recipe, ingredientID, amount, unit, instructions);
