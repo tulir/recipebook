@@ -15,6 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import React, {Component} from "react"
 import PropTypes from "prop-types"
+import {Hashmux} from "hashmux"
 import RecipeEditor from "./components/editor/recipe"
 import RecipeList from "./components/recipelist"
 import Recipe from "./components/recipe"
@@ -31,6 +32,7 @@ class RecipeBook extends Component {
 	static childContextTypes = {
 		ingredients: PropTypes.object,
 		recipes: PropTypes.object,
+		listRecipes: PropTypes.func,
 		newRecipe: PropTypes.func,
 		editRecipe: PropTypes.func,
 		viewRecipe: PropTypes.func,
@@ -46,6 +48,7 @@ class RecipeBook extends Component {
 		return {
 			ingredients: this.state.ingredients,
 			recipes: this.state.recipes,
+			listRecipes: this.listRecipes,
 			newRecipe: this.newRecipe,
 			editRecipe: this.editRecipe,
 			viewRecipe: this.viewRecipe,
@@ -69,12 +72,22 @@ class RecipeBook extends Component {
 		this.fetchIngredients()
 			.then(() => this.fetchRecipes())
 
+		this.router = new Hashmux()
+		this.router.handle("/", this.listRecipes)
+		this.router.handle("/ingredients", this.listIngredients)
+		this.router.handle("/recipe/{id:[0-9]+}", ({id}) => this.viewRecipe(id))
+		this.router.handle("/recipe/edit/{id:[0-9]+}", ({id}) => this.editRecipe(id))
+
 		// Make sure the context functions are always called with this instance as the function context.
 		for (const [key, func] of Object.entries(this.getChildContext())) {
 			if (typeof(func) === "function") {
 				this[key] = func.bind(this)
 			}
 		}
+	}
+
+	componentDidMount() {
+		this.router.update()
 	}
 
 	fetchIngredients() {
@@ -138,7 +151,7 @@ class RecipeBook extends Component {
 	subtitle() {
 		switch(this.state.view) {
 			case VIEW_VIEW_RECIPE:
-				return this.state.currentRecipe.name || ""
+				return this.state.currentRecipe ? this.state.currentRecipe.name : ""
 			case VIEW_EDIT_RECIPE:
 				if (this.state.currentRecipe.name) {
 					return `Editing ${this.state.currentRecipe.name}`
@@ -179,6 +192,10 @@ class RecipeBook extends Component {
 			view: VIEW_EDIT_RECIPE,
 			currentRecipe: {},
 		})
+	}
+
+	listRecipes() {
+		this.setState({view: VIEW_RECIPE_LIST})
 	}
 
 	listIngredients() {
