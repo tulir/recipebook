@@ -202,6 +202,7 @@ class RecipeBook extends Component {
 				const ingredients = this.state.ingredients
 				ingredients.set(data.id, data)
 				this.setState({ingredients})
+				return data
 			})
 			.catch(err => console.log("Unexpected error:", err))
 	}
@@ -262,6 +263,7 @@ class RecipeBook extends Component {
 
 				this.setState({recipes})
 				this.viewRecipe(data.id)
+				return data
 			})
 			.catch(err => console.log("Unexpected error:", err))
 	}

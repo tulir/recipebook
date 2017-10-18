@@ -54,8 +54,11 @@ class Ingredient extends PureComponent {
 			this.cancelEdit()
 			return
 		}
-		this.setState({editing: false})
-		this.context.saveIngredient(this.props.id, Object.assign({}, this.state))
+		this.setState({
+				editing: false,
+				name: this.state.name.trim()
+			},
+			() => this.context.saveIngredient(this.props.id, Object.assign({}, this.state)))
 	}
 
 	componentWillReceiveProps(_, newProps) {

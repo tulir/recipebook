@@ -27,7 +27,7 @@ class PartEditor extends Component {
 	constructor(props, context) {
 		super(props, context)
 		this.state = Object.assign({
-			ingredient: {id: 1},
+			ingredientName: "",
 			unit: "",
 			amount: 0,
 			instructions: ""
@@ -45,11 +45,7 @@ class PartEditor extends Component {
 		}
 
 		const callback = () => this.context.childInputChange(this.props.index, Object.assign({}, this.state))
-		if (target === "ingredient") {
-			this.setState({ingredient: this.context.ingredients.get(+value)}, callback)
-		} else {
-			this.setState({[target]: value}, callback)
-		}
+		this.setState({[target]: value}, callback)
 	}
 
 	render() {
@@ -60,14 +56,15 @@ class PartEditor extends Component {
 				<input className="unit" placeholder="unit" name="unit" value={this.state.unit}
 					   onChange={this.handleInputChange}/>
 				&nbsp;of&nbsp;
-				<select className="ingredient" name="ingredient" value={this.state.ingredient.id}
+				<input list="ingredients" className="ingredient" placeholder="ingredient" name="ingredientName" value={this.state.ingredientName} onChange={this.handleInputChange}/>
+				{/*<select className="ingredient" name="ingredient" value={this.state.ingredient.id}
 						onChange={this.handleInputChange}>
 					{this.context.ingredients.map(ingredient => (
 						<option key={ingredient.id} value={ingredient.id}>
 							{ingredient.name}
 						</option>
 					))}
-				</select>
+				</select>*/}
 				<br/>
 				<textarea rows="3" className="instructions" placeholder="Additional instructions..." name="instructions"
 						  value={this.state.instructions} onChange={this.handleInputChange}/>

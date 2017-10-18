@@ -24,7 +24,9 @@ class RecipeEditor extends Component {
 		childInputChange: PropTypes.func,
 	}
 	static contextTypes = {
-		saveRecipe: PropTypes.func,
+		saveRecipe: PropTypes.func.isRequired,
+		saveIngredient: PropTypes.func.isRequired,
+		ingredients: PropTypes.object.isRequired,
 	}
 
 	getChildContext() {
@@ -42,6 +44,12 @@ class RecipeEditor extends Component {
 			let {name, author, description, instructions, parts} = props
 			if (!parts) {
 				parts = []
+			}
+			for (const part of parts) {
+				if (part.ingredient) {
+					part.ingredientName = part.ingredient.name
+				}
+				delete part.ingredient
 			}
 			this.state = {name, author, description, instructions, parts}
 		}
@@ -85,6 +93,11 @@ class RecipeEditor extends Component {
 				</div>
 
 				<div className="part-editors">
+					<datalist id="ingredients">
+						{this.context.ingredients.map(ingredient =>
+							<option key={ingredient.id} value={ingredient.name}/>
+						)}
+					</datalist>
 					{this.state.parts.map((part, index) => <PartEditor index={index} key={index} {...part}/>)}
 				</div>
 
@@ -103,7 +116,7 @@ class RecipeEditor extends Component {
 	addPart() {
 		const blankPart = {
 			// Preset the ingredient data so that we can expect it to always exist.
-			ingredient: {id: 1}
+			ingredientName: ""
 		}
 		this.setState({
 			parts: this.state.parts.concat([blankPart])
@@ -134,16 +147,44 @@ class RecipeEditor extends Component {
 			}
 		}
 
+		const createdIngredients = []
+
 		// Remove ingredient names
 		for (const part of state.parts) {
-			part.ingredientID = part.ingredient.id
-			delete part.ingredient
+			const partIngredientName = part.ingredientName.trim().toLowerCase()
+
+			// Try to find ingredients with matching names
+			const ingredientID = this.context.ingredients.find(ingredient =>
+				ingredient.name.trim().toLowerCase() === partIngredientName)
+
+			if (!ingredientID) {
+				// Ingredient not found 3:
+				createdIngredients.push(
+					// Send ingredient creation request
+					this.context.saveIngredient(undefined, {
+						name: part.ingredientName.trim(),
+					}).then(data => 
+						// Once it finishes, store the ID of the newly created ingredient in the RecipePart.
+						part.ingredientID = data.id)
+				)
+			} else {
+				// Ingredient found. Just store the ID in the RecipePart.
+				part.ingredientID = ingredientID
+			}
+			// Delete the temporary name storage field.
+			delete part.ingredientName
 		}
 
-		if (this.props.id) {
-			this.context.saveRecipe(this.props.id, state)
+		if (createdIngredients.length !== 0) {
+			// We sent some ingredient creation requests, so we need to wait for them.
+			Promise.all(createdIngredients)
+				.then(() =>
+					// Now that all new ingredients have been created and the IDs have been stored in their respective
+					// RecipeParts, we can save the recipe.
+					this.context.saveRecipe(this.props.id, state))
 		} else {
-			this.context.saveRecipe(undefined, state)
+			// No ingredient creation requests have been sent, so just save the recipe.
+			this.context.saveRecipe(this.props.id, state)
 		}
 	}
 }
