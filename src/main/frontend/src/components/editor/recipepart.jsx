@@ -20,6 +20,7 @@ class PartEditor extends Component {
 	static contextTypes = {
 		ingredients: PropTypes.object.isRequired,
 		deletePart: PropTypes.func.isRequired,
+		duplicatePart: PropTypes.func.isRequired,
 		childInputChange: PropTypes.func.isRequired,
 	}
 
@@ -33,6 +34,7 @@ class PartEditor extends Component {
 		}, props)
 		this.handleInputChange = this.handleInputChange.bind(this)
 		this.delete = this.delete.bind(this)
+		this.duplicate = this.duplicate.bind(this)
 	}
 
 	handleInputChange(event) {
@@ -72,7 +74,7 @@ class PartEditor extends Component {
 
 				<div className="buttons">
 					<button type="button" className="delete" onClick={this.delete}>Delete</button>
-					<button type="button" className="duplicate">Duplicate</button>
+					<button type="button" className="duplicate" onClick={this.duplicate}>Duplicate</button>
 				</div>
 			</div>
 		)
@@ -80,6 +82,10 @@ class PartEditor extends Component {
 
 	delete() {
 		this.context.deletePart(this.props.index)
+	}
+
+	duplicate() {
+		this.context.duplicatePart(this.props.index)
 	}
 }
 

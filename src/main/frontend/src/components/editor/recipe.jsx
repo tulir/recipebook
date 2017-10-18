@@ -20,6 +20,7 @@ import PropTypes from "prop-types"
 class RecipeEditor extends Component {
 	static childContextTypes = {
 		deletePart: PropTypes.func,
+		duplicatePart: PropTypes.func,
 		childInputChange: PropTypes.func,
 	}
 	static contextTypes = {
@@ -29,6 +30,7 @@ class RecipeEditor extends Component {
 	getChildContext() {
 		return {
 			deletePart: this.deletePart,
+			duplicatePart: this.duplicatePart,
 			childInputChange: this.childInputChange,
 		}
 	}
@@ -47,6 +49,7 @@ class RecipeEditor extends Component {
 		this.childInputChange = this.childInputChange.bind(this)
 		this.addPart = this.addPart.bind(this)
 		this.deletePart = this.deletePart.bind(this)
+		this.duplicatePart = this.duplicatePart.bind(this)
 		this.save = this.save.bind(this)
 	}
 
@@ -110,6 +113,12 @@ class RecipeEditor extends Component {
 	deletePart(index) {
 		const parts = this.state.parts
 		delete parts[index]
+		this.setState({parts})
+	}
+
+	duplicatePart(index) {
+		const parts = this.state.parts
+		parts.push(parts[index])
 		this.setState({parts})
 	}
 
