@@ -50,8 +50,13 @@
 			box-sizing: border-box
 
 	> .buttons
-		+button-group
+		+if-big
+			+button-group
 
 		button
 			width: 50%
-		padding-bottom: 1rem
+			+if-small
+				border-radius: 0
+				padding: 1rem
+		+if-big
+			padding-bottom: 1rem

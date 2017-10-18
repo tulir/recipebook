@@ -24,11 +24,15 @@ $header-height: var(--header-height)
 $font-stack: "Raleway", "Roboto", sans-serif
 $max-width: 37.5rem
 
-$breakpoint: "screen and (min-width: #{$max-width + 0.0625rem})"
+$breakpoint-min: "screen and (min-width: #{$max-width + 0.0625rem})"
+$breakpoint-max: "screen and (max-width: #{$max-width})"
 
 
 =if-big
-	@media #{$breakpoint}
+	@media #{$breakpoint-min}
+		@content
+=if-small
+	@media #{$breakpoint-max}
 		@content
 
 @at-root:root
