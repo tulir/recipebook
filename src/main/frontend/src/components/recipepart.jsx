@@ -24,7 +24,7 @@ class RecipePart extends PureComponent {
 					{this.props.amount}
 				</span> <span className="unit">
 					{this.props.unit}
-				</span> of <Ingredient {...this.props.ingredient}/>
+				</span> <Ingredient {...this.props.ingredient}/>
 				<span className="instructions">{this.props.instructions}</span>
 			</div>
 		)

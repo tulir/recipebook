@@ -170,7 +170,7 @@ class RecipeBook extends Component {
 					return "Creating Recipe"
 				}
 			case VIEW_INGREDIENT_LIST:
-				return "Ingredients"
+				return "Saved Ingredients"
 			case VIEW_RECIPE_LIST:
 				return "Recipes"
 			default:

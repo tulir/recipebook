@@ -42,10 +42,13 @@
 
 		.parts
 			margin: .5rem 0
-			> .recipe-part > .instructions
-				&:not(:empty):before
-					content: " - "
-				font-style: italic
+			> .recipe-part
+				> .ingredient
+					font-weight: bold
+				> .instructions
+					&:not(:empty):before
+						content: " - "
+					font-style: italic
 
 		.instructions
 			white-space: pre-wrap
