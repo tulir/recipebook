@@ -165,14 +165,17 @@ class RecipeBook extends Component {
 				this.goBackTo("#/")
 				break
 			case VIEW_EDIT_RECIPE:
-				if (this.state.currentRecipe.name) {
-					this.goBackTo(`#/recipe/${this.state.currentRecipe.name}`)
+				if (this.state.currentRecipe.id) {
+					this.goBackTo(`#/recipe/${this.state.currentRecipe.id}`)
 				} else {
 					this.goBackTo("#/")
 				}
 				break
+			case MAIN_VIEW:
+				// There shouldn't be a back button here.
+				break
 			default:
-				// Unknown site
+				// Unknown view, just go back
 				window.history.back()
 		}
 	}
