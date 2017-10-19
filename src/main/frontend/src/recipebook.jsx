@@ -23,12 +23,14 @@ import ConfirmModal from "./components/confirm-modal"
 import IngredientList from "./components/ingredientlist"
 import BackIcon from "./res/back.svg"
 
+// Allowed views.
 const
 	VIEW_RECIPE_LIST = "recipe-list",
 	VIEW_EDIT_RECIPE = "recipe-editor",
 	VIEW_VIEW_RECIPE = "recipe-full-view",
 	VIEW_INGREDIENT_LIST = "ingredient-list"
 
+// The main view. Has no back button.
 const MAIN_VIEW = VIEW_RECIPE_LIST
 
 class RecipeBook extends Component {
@@ -78,11 +80,16 @@ class RecipeBook extends Component {
 		window.app = this
 
 		this.router = new Hashmux()
+		// Set up routes
 		this.router.handle("/", () => this.listRecipes())
 		this.router.handle("/ingredients", () => this.listIngredients())
 		this.router.handle("/recipe/{id:[0-9]+}", ({id}) => this.viewRecipe(+id))
 		this.router.handle("/recipe/{id:[0-9]+}/edit", ({id}) => this.editRecipe(+id))
 		this.router.handle("/recipe/new", () => this.newRecipe())
+		// Set up URL hash logging.
+		// Currently only used to make sure we have entries in the browser history
+		// before using window.history.back()
+		// @see #goBackTo(url)
 		this.viewLog = []
 		this.router.specialHandlers.prehandle = hash => {
 			this.viewLog.push(hash)
@@ -90,12 +97,19 @@ class RecipeBook extends Component {
 		}
 	}
 
+	/*
+	 * Called by React when the app is mounted.
+	 * Fetches ingredients, then recipes, and finally activates the URL router.
+	 */
 	componentDidMount() {
 		this.fetchIngredients()
 			.then(() => this.fetchRecipes()
 				.then(() => this.router.listen()))
 	}
 
+	/**
+	 * Fetch all ingredients from the server.
+	 */
 	fetchIngredients() {
 		return fetch("api/ingredient/list").then(response => response.json())
 			.then(data => {
@@ -108,6 +122,10 @@ class RecipeBook extends Component {
 			.catch(err => console.log("Unexpected error:", err))
 	}
 
+	/**
+	 * Process recipe data sent by the server.
+	 * This turns the ingredientID field into an ingredient object.
+	 */
 	processRecipeFromServer(recipe) {
 		for (const part of recipe.parts) {
 			const ingredient = this.state.ingredients.get(part.ingredientID)
@@ -123,6 +141,9 @@ class RecipeBook extends Component {
 		}
 	}
 
+	/**
+	 * Fetch all recipes from the server.
+	 */
 	fetchRecipes() {
 		return fetch("api/recipe/list").then(response => response.json())
 			.then(data => {
@@ -135,10 +156,9 @@ class RecipeBook extends Component {
 			}, err => console.log("Unexpected error:", err))
 	}
 
-	canGoBack() {
-		return this.state.view !== VIEW_RECIPE_LIST
-	}
-
+	/**
+	 * Get the subtitle of the current view.
+	 */
 	subtitle() {
 		switch(this.state.view) {
 			case VIEW_VIEW_RECIPE:
@@ -158,6 +178,9 @@ class RecipeBook extends Component {
 		}
 	}
 
+	/**
+	 * Go to the previous view safely using {@link #goBackTo(url)}.
+	 */
 	safeBack() {
 		switch(this.state.view) {
 			case VIEW_VIEW_RECIPE:

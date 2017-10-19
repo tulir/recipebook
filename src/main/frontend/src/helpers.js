@@ -13,11 +13,20 @@
 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
-import React from "react"
-import ReactDOM from "react-dom"
-import "./style/index.sass"
-import "./helpers"
-import RecipeBook from "./recipebook"
 
-// Render app
-ReactDOM.render(<RecipeBook/>, document.getElementById('root'))
+// A helper function to use Maps easily within JSX.
+// eslint-disable-next-line
+Map.prototype.map = function (...args) {
+	return [...this.values()].map(...args)
+}
+
+// A helper function to find a key from a map based on a given filter.
+// eslint-disable-next-line
+Map.prototype.find = function(callback) {
+	for (const [key, value] of this) {
+		if (callback(value)) {
+			return key
+		}
+	}
+	return undefined
+}
