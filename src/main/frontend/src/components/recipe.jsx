@@ -25,6 +25,7 @@ class Recipe extends PureComponent {
 		editRecipe: PropTypes.func.isRequired,
 		viewRecipe: PropTypes.func.isRequired,
 		deleteRecipe: PropTypes.func.isRequired,
+		confirm: PropTypes.func.isRequired,
 	}
 
 	constructor(props, context) {
@@ -44,10 +45,8 @@ class Recipe extends PureComponent {
 	}
 
 	delete() {
-		const confirmation = window.confirm("Are you sure you want to delete this recipe?")
-		if (confirmation) {
-			this.context.deleteRecipe(this.props.id)
-		}
+		this.context.confirm(`Are you sure you want to delete ${this.props.name}?`)
+			.then(() => this.context.deleteRecipe(this.props.id), () => {})
 	}
 
 	render() {

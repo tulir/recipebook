@@ -13,13 +13,18 @@
 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
-@import base/vars
-@import base/elements
-@import base/body
+import React, {PureComponent} from "react"
 
-@import components/recipebook
-@import components/recipe
-@import components/recipe-editor
-@import components/recipepart-editor
-@import components/ingredients
-@import components/modal
+class Modal extends PureComponent {
+	render() {
+		return (
+			<div className="modal-wrapper">
+				<div className={`modal ${this.props.type}`}>
+					{this.props.content}
+				</div>
+			</div>
+		)
+	}
+}
+
+export default Modal

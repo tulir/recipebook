@@ -27,6 +27,7 @@ class RecipeEditor extends Component {
 		saveRecipe: PropTypes.func.isRequired,
 		saveIngredient: PropTypes.func.isRequired,
 		ingredients: PropTypes.object.isRequired,
+		confirm: PropTypes.func.isRequired,
 	}
 
 	getChildContext() {
@@ -39,9 +40,15 @@ class RecipeEditor extends Component {
 
 	constructor(props) {
 		super(props)
-		this.state = {parts: []}
+		this.state = {
+			name: "",
+			author: "",
+			description: "",
+			instructions: "",
+			parts: []
+		}
 		if (props) {
-			let {name, author, description, instructions, parts} = props
+			let {name, author, description, instructions, parts} = Object.assign({}, this.state, props)
 			if (!parts) {
 				parts = []
 			}
@@ -121,8 +128,15 @@ class RecipeEditor extends Component {
 
 	deletePart(index) {
 		const parts = this.state.parts
-		delete parts[index]
-		this.setState({parts})
+		if (!parts.hasOwnProperty(index)) {
+			return
+		}
+		const part = parts[index]
+		this.context.confirm(`Are you sure you want to delete part ${part.amount} ${part.unit} of ${part.ingredientName}?`)
+			.then(() => {
+				delete parts[index]
+				this.setState({parts})
+			}, () => {})
 	}
 
 	duplicatePart(index) {

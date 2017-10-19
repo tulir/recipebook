@@ -19,6 +19,7 @@ import {Hashmux} from "hashmux"
 import RecipeEditor from "./components/editor/recipe"
 import RecipeList from "./components/recipelist"
 import Recipe from "./components/recipe"
+import ConfirmModal from "./components/confirm-modal"
 import IngredientList from "./components/ingredientlist"
 import BackIcon from "./res/back.svg"
 
@@ -43,6 +44,7 @@ class RecipeBook extends Component {
 		listIngredients: PropTypes.func,
 		saveIngredient: PropTypes.func,
 		deleteIngredient: PropTypes.func,
+		confirm: PropTypes.func,
 		back: PropTypes.func,
 	}
 
@@ -59,6 +61,7 @@ class RecipeBook extends Component {
 			listIngredients: () => window.location.hash = "#/ingredients",
 			saveIngredient: this.saveIngredient.bind(this),
 			deleteIngredient: this.deleteIngredient.bind(this),
+			confirm: this.confirm.bind(this),
 			back: this.safeBack.bind(this),
 		}
 	}
@@ -70,6 +73,7 @@ class RecipeBook extends Component {
 			recipes: new Map(),
 			view: MAIN_VIEW,
 			currentRecipe: {},
+			modal: undefined,
 		}
 		window.app = this
 
@@ -193,22 +197,47 @@ class RecipeBook extends Component {
 
 	render() {
 		return (
-			<div className="recipebook">
-				<header>
-					<button onClick={() => this.safeBack()} className={this.state.view === MAIN_VIEW ? "hidden back" : "back"}>
-						<BackIcon/>
-					</button>
-					<span className="title">
-						RecipeBook
-						<span className="subtitle">{this.subtitle()}</span>
-					</span>
-				</header>
-				{this.state.view === VIEW_RECIPE_LIST ? <RecipeList recipes={this.state.recipes}/> : ""}
-				{this.state.view === VIEW_EDIT_RECIPE ? <RecipeEditor {...this.state.currentRecipe}/> : ""}
-				{this.state.view === VIEW_VIEW_RECIPE ? <Recipe {...this.state.currentRecipe}/> : ""}
-				{this.state.view === VIEW_INGREDIENT_LIST ? <IngredientList ingredients={this.state.ingredients}/> : ""}
+			<div className="recipebook-wrapper">
+				<div className="recipebook">
+					<header>
+						<button onClick={() => this.safeBack()} className={this.state.view === MAIN_VIEW ? "hidden back" : "back"}>
+							<BackIcon/>
+						</button>
+						<span className="title">
+							RecipeBook
+							<span className="subtitle">{this.subtitle()}</span>
+						</span>
+					</header>
+					{this.state.view === VIEW_RECIPE_LIST ? <RecipeList recipes={this.state.recipes}/> : ""}
+					{this.state.view === VIEW_EDIT_RECIPE ? <RecipeEditor {...this.state.currentRecipe}/> : ""}
+					{this.state.view === VIEW_VIEW_RECIPE ? <Recipe {...this.state.currentRecipe}/> : ""}
+					{this.state.view === VIEW_INGREDIENT_LIST ? <IngredientList ingredients={this.state.ingredients}/> : ""}
+				</div>
+
+				{this.state.modal ? this.state.modal.render() : ""}
 			</div>
 		)
+	}
+
+	confirm(message) {
+		const promise = new Promise((resolve, reject) => {
+			const modal = new ConfirmModal({
+				content: <div className="message">{message}</div>,
+				type: "",
+				resolve,
+				reject,
+			})
+			this.setState({modal})
+		})
+		promise.then(() => {this.hideModal()})
+			.catch(() => {this.hideModal()})
+		return promise
+	}
+
+	hideModal() {
+		this.setState({
+			modal: undefined
+		})
 	}
 
 	newRecipe() {

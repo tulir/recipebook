@@ -13,13 +13,40 @@
 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
-@import base/vars
-@import base/elements
-@import base/body
+.modal-wrapper
+	position: fixed
+	top: 0
+	bottom: 0
+	left: 0
+	right: 0
 
-@import components/recipebook
-@import components/recipe
-@import components/recipe-editor
-@import components/recipepart-editor
-@import components/ingredients
-@import components/modal
+	background-color: rgba(0, 0, 0, 0.5)
+
+	text-align: center
+
+	.modal
+		position: relative
+		display: inline-block
+
+		background-color: $background-color
+		box-shadow: 0 3px 7px rgba(0, 0, 0, 0.5)
+
+		width: calc(#{$max-width} / 2)
+		max-height: 10rem
+
+		padding: 1.5rem
+		margin: 50vh 5vw
+		transform: translateY(-100%)
+		border-radius: .25rem
+
+.confirm.modal
+	.message
+		font-size: 1rem
+		text-align: left
+
+	.action-buttons
+		margin-top: 1rem
+
+		+button-group
+		button
+			width: 50%
