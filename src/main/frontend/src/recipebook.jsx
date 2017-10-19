@@ -28,6 +28,8 @@ const
 	VIEW_VIEW_RECIPE = "recipe-full-view",
 	VIEW_INGREDIENT_LIST = "ingredient-list"
 
+const MAIN_VIEW = VIEW_RECIPE_LIST
+
 class RecipeBook extends Component {
 	static childContextTypes = {
 		ingredients: PropTypes.object,
@@ -57,7 +59,7 @@ class RecipeBook extends Component {
 			listIngredients: () => window.location.hash = "#/ingredients",
 			saveIngredient: this.saveIngredient.bind(this),
 			deleteIngredient: this.deleteIngredient.bind(this),
-			back: () => window.history.back(),
+			back: this.safeBack.bind(this),
 		}
 	}
 
@@ -66,7 +68,7 @@ class RecipeBook extends Component {
 		this.state = {
 			ingredients: new Map(),
 			recipes: new Map(),
-			view: VIEW_RECIPE_LIST,
+			view: MAIN_VIEW,
 			currentRecipe: {},
 		}
 		window.app = this
@@ -77,6 +79,11 @@ class RecipeBook extends Component {
 		this.router.handle("/recipe/{id:[0-9]+}", ({id}) => this.viewRecipe(+id))
 		this.router.handle("/recipe/{id:[0-9]+}/edit", ({id}) => this.editRecipe(+id))
 		this.router.handle("/recipe/new", () => this.newRecipe())
+		this.viewLog = []
+		this.router.specialHandlers.prehandle = hash => {
+			this.viewLog.push(hash)
+			return false
+		}
 	}
 
 	componentDidMount() {
@@ -147,6 +154,25 @@ class RecipeBook extends Component {
 		}
 	}
 
+	safeBack() {
+		switch(this.state.view) {
+			case VIEW_VIEW_RECIPE:
+			case VIEW_INGREDIENT_LIST:
+				this.goBackTo("#/")
+				break
+			case VIEW_EDIT_RECIPE:
+				if (this.state.currentRecipe.name) {
+					this.goBackTo(`#/recipe/${this.state.currentRecipe.name}`)
+				} else {
+					this.goBackTo("#/")
+				}
+				break
+			default:
+				// Unknown site
+				window.history.back()
+		}
+	}
+
 	/**
 	 * Delete the latest history entry and go to the same URL.
 	 *
@@ -158,7 +184,10 @@ class RecipeBook extends Component {
 	 * window.location.hash assignment does nothing.
 	 */
 	goBackTo(url) {
-		window.history.back()
+		// If the view log has only one entry, history.back() might leave the app.
+		if (this.viewLog.length > 1) {
+			window.history.back()
+		}
 		window.location.hash = url
 	}
 
@@ -166,7 +195,7 @@ class RecipeBook extends Component {
 		return (
 			<div className="recipebook">
 				<header>
-					<button onClick={() => window.history.back()} className="back">
+					<button onClick={() => this.safeBack()} className={this.state.view === MAIN_VIEW ? "hidden back" : "back"}>
 						<BackIcon/>
 					</button>
 					<span className="title">
