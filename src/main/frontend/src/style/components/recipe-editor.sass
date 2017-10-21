@@ -22,41 +22,53 @@
 	top: $header-height
 	width: 100%
 
-	> .field
-		width: 100%
-		box-sizing: border-box
-
-		padding: 0 .5rem .5rem
+	> .editor-fields
+		height: calc(100% - 3.25rem)
 		+if-big
-			padding: 0 0 .5rem
+			height: calc(100% - 2rem)
+		overflow-y: auto
+		overflow-x: hidden
 
-		&.author, &.name
-			display: inline-block
-			width: 50%
+		> .field
+			width: 100%
 			box-sizing: border-box
-			&.name
-				padding-right: .25rem
-			&.author
-				padding-left: .25rem
-			input
-				width: 100%
 
-		&.description, &.instructions
-			input, textarea
-				width: 100%
+			padding: 0 .5rem .5rem
+			+if-big
+				padding: 0 0 .5rem
 
-		label, input, textarea
-			display: block
-			box-sizing: border-box
+			&.author, &.name
+				display: inline-block
+				width: 50%
+				box-sizing: border-box
+				&.name
+					padding-right: .25rem
+				&.author
+					padding-left: .25rem
+				input
+					width: 100%
+
+			&.description, &.instructions
+				input, textarea
+					width: 100%
+
+			label, input, textarea
+				display: block
+				box-sizing: border-box
+
 
 	> .buttons
+		height: 3.25rem
 		+if-big
-			+button-group
-
+			height: 2rem
 		button
 			width: 50%
+			border-radius: 0
 			+if-small
-				border-radius: 0
 				padding: 1rem
-		+if-big
-			padding-bottom: 1rem
+			+if-big
+				&:first-of-type
+					border-radius: .25rem 0 0 0
+				&:last-of-type
+					border-radius: 0 .25rem 0 0
+

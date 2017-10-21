@@ -81,31 +81,33 @@ class RecipeEditor extends Component {
 	render() {
 		return (
 			<form action="#" className="recipe-editor" onSubmit={this.save}>
-				<div className="name field">
-					<label htmlFor="name">Name</label>
-					<input name="name" value={this.state.name} onChange={this.handleInputChange}/>
-				</div>
-				<div className="author field">
-					<label htmlFor="author">Author</label>
-					<input name="author" value={this.state.author} onChange={this.handleInputChange}/>
-				</div>
-				<div className="description field">
-					<label htmlFor="description">Description</label>
-					<input name="description" value={this.state.description} onChange={this.handleInputChange}/>
-				</div>
-				<div className="instructions field">
-					<label htmlFor="instructions">Instructions</label>
-					<textarea rows="8" name="instructions" value={this.state.instructions}
-							  onChange={this.handleInputChange}/>
-				</div>
+				<div className="editor-fields">
+					<div className="name field">
+						<label htmlFor="name">Name</label>
+						<input name="name" value={this.state.name} onChange={this.handleInputChange}/>
+					</div>
+					<div className="author field">
+						<label htmlFor="author">Author</label>
+						<input name="author" value={this.state.author} onChange={this.handleInputChange}/>
+					</div>
+					<div className="description field">
+						<label htmlFor="description">Description</label>
+						<input name="description" value={this.state.description} onChange={this.handleInputChange}/>
+					</div>
+					<div className="instructions field">
+						<label htmlFor="instructions">Instructions</label>
+						<textarea rows="8" name="instructions" value={this.state.instructions}
+								  onChange={this.handleInputChange}/>
+					</div>
 
-				<div className="part-editors">
-					<datalist id="ingredients">
-						{this.context.ingredients.map(ingredient =>
-							<option key={ingredient.id} value={ingredient.name}/>
-						)}
-					</datalist>
-					{this.state.parts.map((part, index) => <PartEditor index={index} key={index} {...part}/>)}
+					<div className="part-editors">
+						<datalist id="ingredients">
+							{this.context.ingredients.map(ingredient =>
+								<option key={ingredient.id} value={ingredient.name}/>
+							)}
+						</datalist>
+						{this.state.parts.map((part, index) => <PartEditor index={index} key={index} {...part}/>)}
+					</div>
 				</div>
 
 				<div className="buttons">

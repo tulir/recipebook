@@ -23,15 +23,35 @@
 	width: calc(100% - 1rem)
 	+if-big
 		width: calc(50% - 1rem)
-	display: inline-block
+
+	display: inline-flex
+	flex-direction: column
 
 	input, textarea, select
 		color: $text-color
 
-	> .amount
-		width: 3rem
-	> .unit
-		width: 2.5rem
+	> .main-info
+		display: flex
+		> .amount
+			width: 3rem
+		> .unit
+			width: 2.5rem
+		> .of-text
+			white-space: pre
+		> .ingredient
+			flex: 1
+
+			// The following Firefox-specific patch may be needed if the ingredient
+			// field being too wide isn't a short-lived bug in the beta version.
+			//@-moz-document url-prefix()
+				flex: initial
+				// Yay magic values
+				// 3rem:      Width of .amount
+				// 2.5rem:    Width of .unit
+				// 1.3125rem: Width of .of-text
+				// 0.5rem:    Magic value
+				width: calc(100% - (3rem + 2.5rem + 1.3125rem + 0.5rem))
+
 	> .instructions
 		width: 100%
 		+input-margin-bottom(.25rem)

@@ -51,21 +51,14 @@ class PartEditor extends Component {
 	render() {
 		return (
 			<div className="part-editor">
-				<input className="amount" placeholder="amount" name="amount" type="number" step="any" value={this.state.amount}
-					   onChange={this.handleInputChange}/>
-				<input className="unit" placeholder="unit" name="unit" value={this.state.unit}
-					   onChange={this.handleInputChange}/>
-				&nbsp;of&nbsp;
-				<input list="ingredients" className="ingredient" placeholder="ingredient" name="ingredientName" value={this.state.ingredientName} onChange={this.handleInputChange}/>
-				{/*<select className="ingredient" name="ingredient" value={this.state.ingredient.id}
-						onChange={this.handleInputChange}>
-					{this.context.ingredients.map(ingredient => (
-						<option key={ingredient.id} value={ingredient.id}>
-							{ingredient.name}
-						</option>
-					))}
-				</select>*/}
-				<br/>
+				<div className="main-info">
+					<input className="amount" placeholder="amount" name="amount" type="number" step="any" value={this.state.amount}
+						   onChange={this.handleInputChange}/>
+					<input className="unit" placeholder="unit" name="unit" value={this.state.unit}
+						   onChange={this.handleInputChange}/>
+					<span className="of-text"> of </span>
+					<input list="ingredients" className="ingredient" placeholder="ingredient" name="ingredientName" value={this.state.ingredientName} onChange={this.handleInputChange}/>
+				</div>
 				<textarea rows="3" className="instructions" placeholder="Additional instructions..." name="instructions"
 						  value={this.state.instructions} onChange={this.handleInputChange}/>
 
