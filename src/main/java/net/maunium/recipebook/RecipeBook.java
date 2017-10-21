@@ -117,7 +117,9 @@ public class RecipeBook {
 				"name         VARCHAR(255) NOT NULL," +
 				"author       VARCHAR(255) NOT NULL," +
 				"description  VARCHAR(255) NOT NULL," +
-				"instructions TEXT         NOT NULL" +
+				"instructions TEXT         NOT NULL," +
+				"time         VARCHAR(255) NOT NULL," +
+				"yield        INTEGER      NOT NULL" +
 			")");
 		stmt.execute("CREATE TABLE IF NOT EXISTS Ingredient (" +
 				"id   INTEGER      PRIMARY KEY," +
@@ -127,7 +129,7 @@ public class RecipeBook {
 				"ingredient   INTEGER      NOT NULL," +
 				"recipe       INTEGER      NOT NULL," +
 				"`order`      INTEGER      NOT NULL," +
-				"amount       REAL        NOT NULL," +
+				"amount       REAL         NOT NULL," +
 				"unit         VARCHAR(5)   NOT NULL," +
 				"instructions VARCHAR(255)," +
 				"FOREIGN KEY (ingredient) REFERENCES Ingredient(id)," +

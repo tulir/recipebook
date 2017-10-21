@@ -37,22 +37,17 @@
 			+if-big
 				padding: 0 0 .5rem
 
-			&.author, &.name
-				display: inline-block
+			&.half.field
+				display: inline-flex
+				flex-direction: column
 				width: 50%
-				box-sizing: border-box
-				&.name
+				&.left.half
 					padding-right: .25rem
-				&.author
+				&.right.half
 					padding-left: .25rem
-				input
-					width: 100%
-
-			&.description, &.instructions
-				input, textarea
-					width: 100%
 
 			label, input, textarea
+				width: 100%
 				display: block
 				box-sizing: border-box
 

@@ -43,22 +43,24 @@ class RecipeEditor extends Component {
 		this.state = {
 			name: "",
 			author: "",
+			yield: 0,
+			time: "0 seconds",
 			description: "",
 			instructions: "",
 			parts: []
 		}
 		if (props) {
-			let {name, author, description, instructions, parts} = Object.assign({}, this.state, props)
-			if (!parts) {
-				parts = []
+			let newState = Object.assign({}, this.state, props)
+			if (!newState.parts) {
+				newState.parts = []
 			}
-			for (const part of parts) {
+			for (const part of newState.parts) {
 				if (part.ingredient) {
 					part.ingredientName = part.ingredient.name
 				}
 				delete part.ingredient
 			}
-			this.state = {name, author, description, instructions, parts}
+			this.state = newState
 		}
 		this.handleInputChange = this.handleInputChange.bind(this)
 		this.childInputChange = this.childInputChange.bind(this)
@@ -82,21 +84,29 @@ class RecipeEditor extends Component {
 		return (
 			<form action="#" className="recipe-editor" onSubmit={this.save}>
 				<div className="editor-fields">
-					<div className="name field">
+					<div className="name left half field">
 						<label htmlFor="name">Name</label>
-						<input name="name" value={this.state.name} onChange={this.handleInputChange}/>
+						<input name="name" placeholder="Name the recipe" value={this.state.name} onChange={this.handleInputChange}/>
 					</div>
-					<div className="author field">
+					<div className="author right half field">
 						<label htmlFor="author">Author</label>
-						<input name="author" value={this.state.author} onChange={this.handleInputChange}/>
+						<input name="author" placeholder="Who made this recipe?" value={this.state.author} onChange={this.handleInputChange}/>
 					</div>
 					<div className="description field">
 						<label htmlFor="description">Description</label>
-						<input name="description" value={this.state.description} onChange={this.handleInputChange}/>
+						<input name="description" placeholder="Briefly describe the recipe" value={this.state.description} onChange={this.handleInputChange}/>
+					</div>
+					<div className="time left half field">
+						<label htmlFor="time">Time</label>
+						<input name="time" placeholder="How long does it take to make?" value={this.state.time} onChange={this.handleInputChange}/>
+					</div>
+					<div className="yield right half field">
+						<label htmlFor="yield">Yield</label>
+						<input name="yield" placeholder="How many servings does it produce?" type="number" value={this.state.yield} onChange={this.handleInputChange}/>
 					</div>
 					<div className="instructions field">
 						<label htmlFor="instructions">Instructions</label>
-						<textarea rows="8" name="instructions" value={this.state.instructions}
+						<textarea placeholder="Write the instructions" rows="8" name="instructions" value={this.state.instructions}
 								  onChange={this.handleInputChange}/>
 					</div>
 

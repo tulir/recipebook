@@ -30,16 +30,18 @@ import java.util.List;
  */
 public class Recipe implements ISQLTableClass {
 	public static Connection db;
-	public int id;
-	public String name, description, author, instructions;
+	public int id, yield;
+	public String name, description, author, instructions, time;
 	public List<RecipePart> parts;
 
-	public Recipe(int id, String name, String description, String author, String instructions) {
+	public Recipe(int id, String name, String description, String author, String instructions, String time, int yield) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.author = author;
 		this.instructions = instructions;
+		this.time = time;
+		this.yield = yield;
 	}
 
 	public void write(PreparedStatement stmt, boolean writeID) throws SQLException {
@@ -47,8 +49,10 @@ public class Recipe implements ISQLTableClass {
 		stmt.setString(2, description);
 		stmt.setString(3, author);
 		stmt.setString(4, instructions);
+		stmt.setString(5, time);
+		stmt.setInt(6, yield);
 		if (writeID) {
-			stmt.setInt(5, id);
+			stmt.setInt(7, id);
 		}
 	}
 
@@ -58,7 +62,7 @@ public class Recipe implements ISQLTableClass {
 
 	public void update(boolean partsChanged) {
 		try {
-			PreparedStatement stmt = db.prepareStatement("UPDATE Recipe SET name=?, description=?, author=?, instructions=? WHERE id = ?");
+			PreparedStatement stmt = db.prepareStatement("UPDATE Recipe SET name=?, description=?, author=?, instructions=?, time=?, yield=? WHERE id = ?");
 			write(stmt, true);
 			stmt.executeUpdate();
 			if (partsChanged) {
@@ -72,7 +76,7 @@ public class Recipe implements ISQLTableClass {
 
 	public void insert() {
 		try {
-			PreparedStatement stmt = db.prepareStatement("INSERT INTO Recipe (name, description, author, instructions) VALUES (?, ?, ?, ?)");
+			PreparedStatement stmt = db.prepareStatement("INSERT INTO Recipe (name, description, author, instructions, time, yield) VALUES (?, ?, ?, ?, ?, ?)");
 			write(stmt, false);
 			id = ISQLTableClass.insertAndGetID(stmt);
 			RecipePart.insertAll(this, parts);
@@ -97,7 +101,9 @@ public class Recipe implements ISQLTableClass {
 		String description = rs.getString("description");
 		String author = rs.getString("author");
 		String instructions = rs.getString("instructions");
-		Recipe r = new Recipe(id, name, description, author, instructions);
+		String time = rs.getString("time");
+		int yield = rs.getInt("yield");
+		Recipe r = new Recipe(id, name, description, author, instructions, time, yield);
 		r.parts = RecipePart.getAll(r);
 		return r;
 	}

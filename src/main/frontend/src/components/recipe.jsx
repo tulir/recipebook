@@ -59,9 +59,9 @@ class Recipe extends PureComponent {
 						</span> by <span className="author">
 							{this.props.author}
 						</span>
-						<span className="description">
+						<div className="description">
 							{this.props.description}
-						</span>
+						</div>
 					</div>
 				</div>
 			)
@@ -83,9 +83,17 @@ class Recipe extends PureComponent {
 					</span> by <span className="author">
 						{this.props.author}
 					</span>
-					<span className="description">
+
+					<div className="description">
 						{this.props.description}
+					</div>
+
+					<span className="time">
+						Takes about {this.props.time}
+					</span> - <span className="yield">
+						Yields {this.props.yield} portions
 					</span>
+					
 					<div className="parts">
 						{this.props.parts.map((part, index) => <RecipePart key={index} {...part}/>)}
 					</div>
