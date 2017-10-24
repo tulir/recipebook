@@ -54,7 +54,7 @@ class PartEditor extends Component {
 				<div className="main-info">
 					<input className="amount" placeholder="amount" name="amount" type="number" step="any" value={this.state.amount}
 						   onChange={this.handleInputChange}/>
-					<input className="unit" placeholder="unit" name="unit" value={this.state.unit}
+					<input className="unit" maxLength="5" placeholder="unit" name="unit" value={this.state.unit}
 						   onChange={this.handleInputChange}/>
 					<span className="of-text"> of </span>
 					<input list="ingredients" className="ingredient" placeholder="ingredient" name="ingredientName" value={this.state.ingredientName} onChange={this.handleInputChange}/>
