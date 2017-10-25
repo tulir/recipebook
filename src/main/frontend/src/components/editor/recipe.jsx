@@ -51,14 +51,10 @@ class RecipeEditor extends Component {
 		}
 		if (props) {
 			let newState = Object.assign({}, this.state, props)
-			if (!newState.parts) {
-				newState.parts = []
-			}
 			for (const part of newState.parts) {
 				if (part.ingredient) {
 					part.ingredientName = part.ingredient.name
 				}
-				delete part.ingredient
 			}
 			this.state = newState
 		}
